@@ -19,10 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="source\Debug.h" />
+    <ClInclude Include="source\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
