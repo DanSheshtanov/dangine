@@ -2,16 +2,17 @@
 
 class Window;
 
-class IDXGISwapChain;
-class ID3D11Device;
-class ID3D11DeviceContext;
-class ID3D11RenderTargetView;
+struct IDXGISwapChain;
+struct ID3D11Device;
+struct ID3D11DeviceContext;
+struct ID3D11RenderTargetView;
 
 class Renderer
 {
 public:
 	void Init(Window* wnd);
 	void RenderFrame();
+	ID3D11Device* GetDevice() { return dev; }
 
 private:
 	Window* window;

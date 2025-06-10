@@ -3,6 +3,7 @@
 #include "Debug.h"
 #include "Window.h"
 #include "Renderer.h"
+#include "Material.h"
 
 // Program entry point
 int WINAPI WinMain(
@@ -20,6 +21,8 @@ int WINAPI WinMain(
 
     Renderer rend;
     rend.Init(&wnd);
+
+    Material mat1{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso" };
 
     // Used to hold windows event messages
     MSG msg;

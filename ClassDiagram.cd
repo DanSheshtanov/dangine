@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Renderer" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAACkAIgAAAAAEAgAgIAAACAAAAAAA=</HashCode>
+      <FileName>src\Renderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Time" Collapsed="true">
+    <Position X="3.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Time.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Window" Collapsed="true">
+    <Position X="5.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAQAQAQAAEBAAAAAAAAAAAACCEEAAAA=</HashCode>
+      <FileName>src\Window.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Material" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAABAAAAAAAAAAgAAAAAAEAAAEAQAAAAAAAAA=</HashCode>
+      <FileName>src\Material.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
