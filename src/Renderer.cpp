@@ -2,15 +2,35 @@
 
 #include "Window.h"
 #include "Renderer.h"
+#include "Debug.h"
 
 void Renderer::Init(Window* wnd)
 {
 	window = wnd;
 
-	InitD3D();
+    if (InitD3D() != S_OK)
+    {
+        MessageBox(NULL, L"Failed to initialise Direct3D!", L"Critical Error!", MB_ICONERROR | MB_OK);
+    }
 }
 
-void Renderer::InitD3D()
+// This function will render a single frame
+void Renderer::RenderFrame()
+{
+    // Clear back buffer with desired colour
+    FLOAT bg[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+    devcon->ClearRenderTargetView(backbuffer, bg);
+
+    // Alternatively, include <DirectXColors.h> and do
+    // You can press F12 on the Colors or DarkSlateGray to see a list of all colours
+    // Adding a using namespace DirectX will make it less cumbersome to use this
+    //g_devcon->ClearRenderTargetView(g_backbuffer, DirectX::Colors::DarkSlateGray);
+
+    // Flip the back and front buffers around. Display on screen
+    swapchain->Present(0, 0);
+}
+
+int Renderer::InitD3D()
 {
     // Create a struct to hold information about the swap chain
     DXGI_SWAP_CHAIN_DESC scd = {};
@@ -37,13 +57,56 @@ void Renderer::InitD3D()
         NULL,                               // Size of array passed to above member - NULL since we passed NULL
         D3D11_SDK_VERSION,                  // Always set to D3D11_SDK_VERSION
         &scd,                               // Pointer to our swap chain description
-        &swapchain,                       // Pointer to our swap chain COM object
-        &dev,                             // Pointer to our device
+        &swapchain,                         // Pointer to our swap chain COM object
+        &dev,                               // Pointer to our device
         NULL,                               // Out param - will be set to chosen feature level
-        &devcon);                         // Pointer to our immediate device context
+        &devcon);                           // Pointer to our immediate device context
 
-    //if (FAILED(hr)) return hr;
+    if (FAILED(hr))
+    {
+        LOG("Failed to create a Direct3D device.");
+        return hr;
+    }
 
-    //return S_OK;
+    // Get the address of the back buffer
+    ID3D11Texture2D* pBackBufferTexture = nullptr;
+    // Get the back buffer from the swap chain
+    hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBufferTexture);
+    if (FAILED(hr)) return hr;
 
+    // Use the back buffer address to create the render target view
+    hr = dev->CreateRenderTargetView(pBackBufferTexture, NULL, &backbuffer);
+    if (FAILED(hr)) return hr;
+
+    pBackBufferTexture->Release(); // This object is no longer needed
+
+    // Set the back buffer as the current render target
+    devcon->OMSetRenderTargets(1, &backbuffer, NULL);
+
+    // Define and set the viewport
+    D3D11_VIEWPORT viewport = {};
+    viewport.TopLeftX = 0;
+    viewport.TopLeftY = 0;
+    viewport.Width = window->GetWidth();
+    viewport.Height = window->GetHeight();
+    viewport.MinDepth = 0;
+    viewport.MaxDepth = 1;
+    devcon->RSSetViewports(1, &viewport);
+
+    return S_OK; // The same as 0, aka no error
+
+}
+
+int Renderer::InitPipeline()
+{
+
+    return S_OK;
+}
+
+void Renderer::CleanD3D()
+{
+    if (backbuffer) backbuffer->Release();
+    if (swapchain)  swapchain->Release();
+    if (dev)        dev->Release();
+    if (devcon)     devcon->Release();
 }

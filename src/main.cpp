@@ -40,6 +40,7 @@ int WINAPI WinMain(
         else
         {
             // Game code here
+            rend.RenderFrame();
         }
     }
 

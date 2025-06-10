@@ -1,16 +1,17 @@
 #pragma once
-#include <d3d11.h>
 
 class Window;
 
-//class IDXGISwapChain;
-//class ID3D11Device;
-//class ID3D11DeviceContext;
+class IDXGISwapChain;
+class ID3D11Device;
+class ID3D11DeviceContext;
+class ID3D11RenderTargetView;
 
 class Renderer
 {
 public:
 	void Init(Window* wnd);
+	void RenderFrame();
 
 private:
 	Window* window;
@@ -18,7 +19,11 @@ private:
 	IDXGISwapChain* swapchain = NULL; // the pointer to the swap chain interface
 	ID3D11Device* dev = NULL; // the pointer to our Direct3D device interface
 	ID3D11DeviceContext* devcon = NULL; // the pointer to our Direct3D device context
+	ID3D11RenderTargetView* backbuffer = NULL; // a view to access our back buffer
 
-	void InitD3D();
+
+	int InitD3D();
+	int InitPipeline();
+	void CleanD3D();
 };
 
