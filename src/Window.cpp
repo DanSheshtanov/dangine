@@ -4,9 +4,10 @@
 const wchar_t* windowName = L"DirectX Hello World!"; // Wide char array
 
 
-Window::Window(int width, int hight, HINSTANCE hInstance, int nCmdShow)
+Window::Window(int width, int height, HINSTANCE hInstance, int nCmdShow)
+    : hInst(hInstance), width(width), height(height)
 {
-    hInst = hInstance; // Store our app handle (app memory location)
+    //hInst = hInstance; // Store our app handle (app memory location)
 
     // First we need to register our window class.
     // This is how windows stores properties for windows that we want to create.

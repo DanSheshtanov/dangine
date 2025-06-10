@@ -5,8 +5,12 @@
 class Window
 {
 public:
-	Window(int width, int hight, HINSTANCE hInstance, int nCmdShow);
+	Window(int width, int height, HINSTANCE hInstance, int nCmdShow);
 	bool Exists() { return handle != NULL; }
+	HWND GetHandle() { return handle; }
+	int GetWidth() { return width; }
+	int GetHeight() { return height; }
+
 private:
 	HWND handle = 0;
 	HINSTANCE hInst;

@@ -2,6 +2,7 @@
 
 #include "Debug.h"
 #include "Window.h"
+#include "Renderer.h"
 
 // Program entry point
 int WINAPI WinMain(
@@ -16,6 +17,9 @@ int WINAPI WinMain(
         LOG("Failed to create a window, quitting...");
         return -1;
     }
+
+    Renderer rend;
+    rend.Init(&wnd);
 
     // Used to hold windows event messages
     MSG msg;
