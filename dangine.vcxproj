@@ -19,14 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\Time.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="source\Debug.h" />
-    <ClInclude Include="source\Time.h" />
+    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\Debug.h" />
+    <ClInclude Include="src\Time.h" />
+    <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
