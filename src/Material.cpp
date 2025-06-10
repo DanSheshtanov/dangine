@@ -22,3 +22,12 @@ Material::Material(std::string name, ID3D11Device* dev,
 		return;
 	}
 }
+
+void Material::SetActive(ID3D11DeviceContext* devcon)
+{
+	//dev->GetImmediateContext
+
+	devcon->VSSetShader(vShader, 0, 0);
+	devcon->PSSetShader(pShader, 0, 0);
+	devcon->IASetInputLayout(vLayout);
+}

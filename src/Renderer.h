@@ -7,12 +7,16 @@ struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct ID3D11RenderTargetView;
 
+class Material;
+class Mesh;
+
 class Renderer
 {
 public:
 	void Init(Window* wnd);
-	void RenderFrame();
+	void RenderFrame(Material* mat, Mesh* mesh);
 	ID3D11Device* GetDevice() { return dev; }
+	ID3D11DeviceContext* GetDeviceCon() { return devcon; }
 
 private:
 	Window* window;

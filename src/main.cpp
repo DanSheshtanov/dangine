@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "Material.h"
+#include "Mesh.h"
 
 // Program entry point
 int WINAPI WinMain(
@@ -23,6 +24,7 @@ int WINAPI WinMain(
     rend.Init(&wnd);
 
     Material mat1{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso" };
+    Mesh mesh1{ rend.GetDevice(), rend.GetDeviceCon() };
 
     // Used to hold windows event messages
     MSG msg;
@@ -43,7 +45,7 @@ int WINAPI WinMain(
         else
         {
             // Game code here
-            rend.RenderFrame();
+            rend.RenderFrame(&mat1, &mesh1);
         }
     }
 

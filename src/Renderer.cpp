@@ -4,6 +4,9 @@
 #include "Renderer.h"
 #include "Debug.h"
 
+#include "Material.h"
+#include "Mesh.h"
+
 void Renderer::Init(Window* wnd)
 {
 	window = wnd;
@@ -15,7 +18,7 @@ void Renderer::Init(Window* wnd)
 }
 
 // This function will render a single frame
-void Renderer::RenderFrame()
+void Renderer::RenderFrame(Material* mat, Mesh* mesh)
 {
     // Clear back buffer with desired colour
     FLOAT bg[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -25,6 +28,9 @@ void Renderer::RenderFrame()
     // You can press F12 on the Colors or DarkSlateGray to see a list of all colours
     // Adding a using namespace DirectX will make it less cumbersome to use this
     //g_devcon->ClearRenderTargetView(g_backbuffer, DirectX::Colors::DarkSlateGray);
+
+    mat->SetActive(devcon);
+    mesh->Render();
 
     // Flip the back and front buffers around. Display on screen
     swapchain->Present(0, 0);

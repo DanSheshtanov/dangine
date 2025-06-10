@@ -10,7 +10,7 @@ class Material
 {
 public:
 	Material(std::string name, ID3D11Device* dev, std::string vShaderFilename, std::string pShaderFilename);
-
+	void SetActive(ID3D11DeviceContext* devcon);
 private:
 	std::string name;
 
