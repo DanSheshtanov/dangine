@@ -6,6 +6,12 @@
 
 #include "Material.h"
 #include "Mesh.h"
+#include "Camera.h"
+
+struct CONSTANT_BUFFER0
+{
+    XMMATRIX WVP;   // 64 bytes (4x4 = 16 floats. 16x4 bytes each = 64 bytes total)
+};
 
 void Renderer::Init(Window* wnd)
 {
@@ -18,7 +24,7 @@ void Renderer::Init(Window* wnd)
 }
 
 // This function will render a single frame
-void Renderer::RenderFrame(Material* mat, Mesh* mesh)
+void Renderer::RenderFrame(Camera& cam, Material* mat, Mesh* mesh, Transform& trans)
 {
     // Clear back buffer with desired colour
     FLOAT bg[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -28,6 +34,28 @@ void Renderer::RenderFrame(Material* mat, Mesh* mesh)
     // You can press F12 on the Colors or DarkSlateGray to see a list of all colours
     // Adding a using namespace DirectX will make it less cumbersome to use this
     //g_devcon->ClearRenderTargetView(g_backbuffer, DirectX::Colors::DarkSlateGray);
+
+
+#pragma region Stinky Buffer
+    ID3D11Buffer* pCBuffer = NULL;
+    D3D11_BUFFER_DESC cbd;
+    ZeroMemory(&cbd, sizeof(cbd));
+    cbd.Usage = D3D11_USAGE_DEFAULT;
+    cbd.ByteWidth = sizeof(CONSTANT_BUFFER0);
+    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    if (FAILED(dev->CreateBuffer(&cbd, NULL, &pCBuffer)))
+    {
+        LOG("Oops, failed to create CBuffer.");
+        return;
+    }
+#pragma endregion
+
+
+    CONSTANT_BUFFER0 cBuffer_values;
+    cBuffer_values.WVP = trans.GetWorldMatrix() * cam.GetViewMatrix() *
+        cam.GetProjectionMatrix(window->GetWidth(), window->GetHeight());
+    devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer_values, 0, 0);
+    devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 
     mat->SetActive(devcon);
     mesh->Render();
@@ -100,13 +128,6 @@ int Renderer::InitD3D()
     devcon->RSSetViewports(1, &viewport);
 
     return S_OK; // The same as 0, aka no error
-
-}
-
-int Renderer::InitPipeline()
-{
-
-    return S_OK;
 }
 
 void Renderer::CleanD3D()

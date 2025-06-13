@@ -5,6 +5,9 @@
 #include "Renderer.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "Transform.h"
+#include "Camera.h"
+#include "Time.h"
 
 // Program entry point
 int WINAPI WinMain(
@@ -29,6 +32,15 @@ int WINAPI WinMain(
     // Used to hold windows event messages
     MSG msg;
 
+    Transform t;
+    t.position = XMVectorSetZ(t.position, 1);
+    //t.eulerRotation = XMVectorSetX(t.eulerRotation, XM_PIDIV2);
+    //t.Rotate(XMVECTOR{ 0, XM_PIDIV2, 0 });
+    XMVECTOR forward = t.GetForward();
+
+    Camera cam;
+    float time = 0;
+
     // Enter the main loop:
     while (true)
     {
@@ -44,8 +56,13 @@ int WINAPI WinMain(
         }
         else
         {
+            Time::Update();
             // Game code here
-            rend.RenderFrame(&mat1, &mesh1);
+            time += Time::GetDeltaTime();
+            t.position = XMVectorSetX(t.position, sin(time));
+            cam.transform.Translate(XMVECTOR{ 0, 0, 0.1f * Time::GetDeltaTime() });
+            LOG(std::to_string(XMVectorGetX(t.position)));
+            rend.RenderFrame(cam, &mat1, &mesh1, t);
         }
     }
 

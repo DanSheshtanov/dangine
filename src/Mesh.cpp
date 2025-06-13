@@ -24,6 +24,19 @@ Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon)
         { XMFLOAT3{ 0.5f, -0.5f, 0.0f}, XMFLOAT4{Colors::Blue}},
     };
 
+    //Vertex vertices[] =
+    //{
+    //    // x     y      z      r      g      b      a
+    //    { XMFLOAT3{-0.5f, -0.5f, -0.5f},  XMFLOAT4{1.0f,  0.0f,  0.0f,  1.0f}},  // Front BL
+    //    { XMFLOAT3{-0.5f,  0.5f, -0.5f},  XMFLOAT4{0.0f,  1.0f,  0.0f,  1.0f}},  // Front TL
+    //    { XMFLOAT3{ 0.5f,  0.5f, -0.5f},  XMFLOAT4{0.0f,  0.0f,  1.0f,  1.0f}},  // Front TR
+    //    { XMFLOAT3{ 0.5f, -0.5f, -0.5f},  XMFLOAT4{1.0f,  1.0f,  1.0f,  1.0f}},  // Front BR
+    //    { XMFLOAT3{-0.5f, -0.5f,  0.5f},  XMFLOAT4{0.0f,  1.0f,  1.0f,  1.0f}},  // Back BL
+    //    { XMFLOAT3{-0.5f,  0.5f,  0.5f},  XMFLOAT4{1.0f,  0.0f,  1.0f,  1.0f}},  // Back TL
+    //    { XMFLOAT3{ 0.5f,  0.5f,  0.5f},  XMFLOAT4{1.0f,  1.0f,  0.0f,  1.0f}},  // Back TR
+    //    { XMFLOAT3{ 0.5f, -0.5f,  0.5f},  XMFLOAT4{0.0f,  0.0f,  0.0f,  1.0f}},  // Back BR
+    //};
+
     // Create the vertex buffer
     D3D11_BUFFER_DESC bd = { 0 };
     bd.Usage = D3D11_USAGE_DYNAMIC; // Dynamic allows CPU-write and GPU-read

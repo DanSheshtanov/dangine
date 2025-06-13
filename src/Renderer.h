@@ -9,12 +9,14 @@ struct ID3D11RenderTargetView;
 
 class Material;
 class Mesh;
+class Camera;
+class Transform;
 
 class Renderer
 {
 public:
 	void Init(Window* wnd);
-	void RenderFrame(Material* mat, Mesh* mesh);
+	void RenderFrame(Camera& cam, Material* mat, Mesh* mesh, Transform& trans);
 	ID3D11Device* GetDevice() { return dev; }
 	ID3D11DeviceContext* GetDeviceCon() { return devcon; }
 
@@ -28,7 +30,6 @@ private:
 
 
 	int InitD3D();
-	int InitPipeline();
 	void CleanD3D();
 };
 
