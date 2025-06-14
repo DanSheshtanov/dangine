@@ -8,6 +8,8 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "Time.h"
+#include "Entity.h"
+
 
 // Program entry point
 int WINAPI WinMain(
@@ -24,22 +26,24 @@ int WINAPI WinMain(
     }
 
     Renderer rend;
-    rend.Init(&wnd);
+    if (FAILED(rend.Init(&wnd)))
+    {
+        LOG("Failed to create a renderer, quitting...");
+        return -1;
+    }
 
-    Material mat1{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso" };
-    Mesh mesh1{ rend.GetDevice(), rend.GetDeviceCon() };
+    // Assets
+    Material* mat1 = new Material{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso" };
+    Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon() };
+
+    // Scene
+    Camera cam;
+    cam.transform.position = XMVectorSetZ(cam.transform.position, -1);
+    Entity e{ "Tringle", &mesh1, &mat1};
+    rend.RegisterEntity(&e);
 
     // Used to hold windows event messages
     MSG msg;
-
-    Transform t;
-    t.position = XMVectorSetZ(t.position, 1);
-    //t.eulerRotation = XMVectorSetX(t.eulerRotation, XM_PIDIV2);
-    //t.Rotate(XMVECTOR{ 0, XM_PIDIV2, 0 });
-    XMVECTOR forward = t.GetForward();
-
-    Camera cam;
-    float time = 0;
 
     // Enter the main loop:
     while (true)
@@ -56,13 +60,18 @@ int WINAPI WinMain(
         }
         else
         {
-            Time::Update();
             // Game code here
-            time += Time::GetDeltaTime();
-            t.position = XMVectorSetX(t.position, sin(time));
-            cam.transform.Translate(XMVECTOR{ 0, 0, 0.1f * Time::GetDeltaTime() });
-            LOG(std::to_string(XMVectorGetX(t.position)));
-            rend.RenderFrame(cam, &mat1, &mesh1, t);
+            Time::Update();
+
+            cam.transform.Translate(XMVECTOR{ 0, 0, -0.05f * Time::GetDeltaTime()});
+            LOG(std::to_string(XMVectorGetZ(cam.transform.position)));
+
+            if (XMVectorGetZ(cam.transform.position) < -1.4)
+            {
+                rend.DestroyEntity(&e);
+            }
+
+            rend.RenderFrame(cam);
         }
     }
 

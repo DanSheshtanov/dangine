@@ -11,8 +11,8 @@ public:
 	Transform transform;
 
 	float fov = 65;
-	float nearClippingPlane = 0.1;
-	float farClippingPlane = 100;
+	float nearClippingPlane = 0.1f;
+	float farClippingPlane = 100.0f;
 
 	XMMATRIX GetViewMatrix();
 	XMMATRIX GetProjectionMatrix(int screenWidth, int screenHeight);

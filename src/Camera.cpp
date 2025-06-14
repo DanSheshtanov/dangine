@@ -11,7 +11,7 @@ XMMATRIX Camera::GetViewMatrix()
 XMMATRIX Camera::GetProjectionMatrix(int screenWidth, int screenHeight)
 {
 	return XMMatrixPerspectiveFovLH(
-		fov,
+		XMConvertToRadians(fov),
 		screenWidth / (float)screenHeight,
 		nearClippingPlane,
 		farClippingPlane);
