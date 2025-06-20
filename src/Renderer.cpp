@@ -25,7 +25,7 @@ int Renderer::Init(Window* wnd)
         return -1;
     }
 
-#pragma region Stinky Buffer
+#pragma region Stinky CBuffer
     
     D3D11_BUFFER_DESC cbd;
     ZeroMemory(&cbd, sizeof(cbd));

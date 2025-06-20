@@ -5,10 +5,10 @@
 #include "Renderer.h"
 #include "Material.h"
 #include "Mesh.h"
-#include "Transform.h"
 #include "Camera.h"
 #include "Time.h"
 #include "Entity.h"
+#include "ModelLoader.h"
 
 
 // Program entry point
@@ -18,6 +18,10 @@ int WINAPI WinMain(
     _In_ LPSTR lpCmdLine,
     _In_ int nCmdShow)
 {
+
+    ModelLoader ml;
+    ml.LoadModel("assets/models/cube.obj");
+
     Window wnd{ 800, 600, hInstance, nCmdShow };
     if (!wnd.Exists())
     {
@@ -38,7 +42,7 @@ int WINAPI WinMain(
 
     // Scene
     Camera cam;
-    cam.transform.position = XMVectorSetZ(cam.transform.position, -1);
+    cam.transform.position = XMVectorSetZ(cam.transform.position, -5);
     Entity e{ "Tringle", &mesh1, &mat1};
     rend.RegisterEntity(&e);
 
@@ -63,13 +67,16 @@ int WINAPI WinMain(
             // Game code here
             Time::Update();
 
-            cam.transform.Translate(XMVECTOR{ 0, 0, -0.05f * Time::GetDeltaTime()});
-            LOG(std::to_string(XMVectorGetZ(cam.transform.position)));
+            //cam.transform.Translate(XMVECTOR{ 0, 0, -0.05f * Time::GetDeltaTime()});
+            //LOG(std::to_string(XMVectorGetZ(cam.transform.position)));
 
-            if (XMVectorGetZ(cam.transform.position) < -1.4)
+            XMVECTOR cameraRotation = XMVectorScale({ 0.1, 0.4, 0.05 }, Time::GetDeltaTime());
+            e.transform.Rotate(cameraRotation);
+
+            /*if (XMVectorGetZ(cam.transform.position) < -1.4)
             {
                 rend.DestroyEntity(&e);
-            }
+            }*/
 
             rend.RenderFrame(cam);
         }

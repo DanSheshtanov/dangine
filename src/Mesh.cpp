@@ -4,7 +4,7 @@
 
 #include "Debug.h"
 #include "Mesh.h"
-
+#include "ModelLoader.h"
 
 using namespace DirectX;
 
@@ -17,30 +17,32 @@ struct Vertex
 Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon)
     : dev(dev), devcon(devcon)
 {
-    Vertex vertices[] =
-    {
-        { XMFLOAT3{-0.5f, -0.5f, 0.0f}, XMFLOAT4{Colors::Red} },
-        { XMFLOAT3{ 0.0f,  0.5f, 0.0f}, XMFLOAT4{Colors::Lime}},
-        { XMFLOAT3{ 0.5f, -0.5f, 0.0f}, XMFLOAT4{Colors::Blue}},
-    };
-
     //Vertex vertices[] =
     //{
-    //    // x     y      z      r      g      b      a
-    //    { XMFLOAT3{-0.5f, -0.5f, -0.5f},  XMFLOAT4{1.0f,  0.0f,  0.0f,  1.0f}},  // Front BL
-    //    { XMFLOAT3{-0.5f,  0.5f, -0.5f},  XMFLOAT4{0.0f,  1.0f,  0.0f,  1.0f}},  // Front TL
-    //    { XMFLOAT3{ 0.5f,  0.5f, -0.5f},  XMFLOAT4{0.0f,  0.0f,  1.0f,  1.0f}},  // Front TR
-    //    { XMFLOAT3{ 0.5f, -0.5f, -0.5f},  XMFLOAT4{1.0f,  1.0f,  1.0f,  1.0f}},  // Front BR
-    //    { XMFLOAT3{-0.5f, -0.5f,  0.5f},  XMFLOAT4{0.0f,  1.0f,  1.0f,  1.0f}},  // Back BL
-    //    { XMFLOAT3{-0.5f,  0.5f,  0.5f},  XMFLOAT4{1.0f,  0.0f,  1.0f,  1.0f}},  // Back TL
-    //    { XMFLOAT3{ 0.5f,  0.5f,  0.5f},  XMFLOAT4{1.0f,  1.0f,  0.0f,  1.0f}},  // Back TR
-    //    { XMFLOAT3{ 0.5f, -0.5f,  0.5f},  XMFLOAT4{0.0f,  0.0f,  0.0f,  1.0f}},  // Back BR
+    //    { XMFLOAT3{-0.5f, -0.5f, 0.0f}, XMFLOAT4{Colors::Red} },
+    //    { XMFLOAT3{ 0.0f,  0.5f, 0.0f}, XMFLOAT4{Colors::Lime}},
+    //    { XMFLOAT3{ 0.5f, -0.5f, 0.0f}, XMFLOAT4{Colors::Blue}},
     //};
+
+    ModelLoader ml;
+    ml.LoadModel("assets/models/cube.obj");
+    Vertex vertices[] =
+    {
+        { ml.temp_vertices[0], XMFLOAT4{Colors::Red} },
+        { ml.temp_vertices[1], XMFLOAT4{Colors::Lime} },
+        { ml.temp_vertices[2], XMFLOAT4{Colors::Blue} },
+        { ml.temp_vertices[3], XMFLOAT4{Colors::Red} },
+        { ml.temp_vertices[4], XMFLOAT4{Colors::Lime} },
+        { ml.temp_vertices[5], XMFLOAT4{Colors::Red} },
+        { ml.temp_vertices[6], XMFLOAT4{Colors::Blue} },
+        { ml.temp_vertices[7], XMFLOAT4{Colors::Red} },
+    };
+    
 
     // Create the vertex buffer
     D3D11_BUFFER_DESC bd = { 0 };
     bd.Usage = D3D11_USAGE_DYNAMIC; // Dynamic allows CPU-write and GPU-read
-    bd.ByteWidth = sizeof(Vertex) * 3; // Size of buffer - sizeof vertex * num of vertices
+    bd.ByteWidth = sizeof(Vertex) * 8; // Size of buffer - sizeof vertex * num of vertices
     //bd.ByteWidth = sizeof(vertices); // Alternatively can also be this for simplicty
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER; // Use as vertex buffer
     bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // Allow CPU to write in buffer
@@ -70,5 +72,5 @@ void Mesh::Render()
     devcon->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // Draw 3 vertices
-    devcon->Draw(3, 0);
+    devcon->Draw(8, 0);
 }
