@@ -69,6 +69,10 @@ void ModelLoader::ParseFace(std::string face)
 	case ModelLoader::FaceFormat::V:
 		break;
 	case ModelLoader::FaceFormat::V_VT:
+		replaced = sscanf_s(face.c_str(), "%u/%u %u/%u %u/%u",
+			&p1.v, &p1.vt, &p2.v, &p2.vt, &p3.v, &p3.vt);
+		if (replaced != 6)
+			return;
 		break;
 	case ModelLoader::FaceFormat::V_VN:
 		replaced = sscanf_s(face.c_str(), "%u//%u %u//%u %u//%u",
