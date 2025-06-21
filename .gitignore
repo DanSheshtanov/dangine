@@ -77,6 +77,8 @@ StyleCopReport.xml
 *.ilk
 *.meta
 *.obj
+# Allow .obj (and all other files) if it's in the assets directory
+!assets/**
 *.iobj
 *.pch
 *.pdb
