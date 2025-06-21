@@ -19,8 +19,8 @@ int WINAPI WinMain(
     _In_ int nCmdShow)
 {
 
-    ModelLoader ml;
-    ml.LoadModel("assets/models/cube.obj");
+    //ModelLoader ml;
+    //ml.LoadModel("assets/models/cube.obj");
 
     Window wnd{ 800, 600, hInstance, nCmdShow };
     if (!wnd.Exists())

@@ -37,7 +37,6 @@ Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon)
         { ml.temp_vertices[6], XMFLOAT4{Colors::Blue} },
         { ml.temp_vertices[7], XMFLOAT4{Colors::Red} },
     };
-    
 
     // Create the vertex buffer
     D3D11_BUFFER_DESC bd = { 0 };
@@ -59,6 +58,20 @@ Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon)
     devcon->Map(vBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms); // Map the buffer
     memcpy(ms.pData, vertices, sizeof(vertices)); // Copy the data to the buffer
     devcon->Unmap(vBuffer, NULL); // Unmap the buffer
+
+    D3D11_BUFFER_DESC indexBD = { 0 };
+    indexBD.Usage = D3D11_USAGE_DEFAULT;
+    indexBD.ByteWidth = sizeof(unsigned int) * ml.vertexIndices.size();
+    indexBD.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+    D3D11_SUBRESOURCE_DATA initData = { 0 };
+    initData.pSysMem = ml.vertexIndices.data();
+
+    if (FAILED(dev->CreateBuffer(&indexBD, &initData, &iBuffer)))
+    {
+        LOG("Failed to create index buffer.");
+        return;
+    }
 }
 
 void Mesh::Render()
@@ -71,6 +84,9 @@ void Mesh::Render()
     // Select which primtive we are using
     devcon->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+    devcon->IASetIndexBuffer(iBuffer, DXGI_FORMAT_R32_UINT, 0);
+    
     // Draw 3 vertices
-    devcon->Draw(8, 0);
+    //devcon->Draw(8, 0);
+    devcon->DrawIndexed(36, 0, 0);
 }

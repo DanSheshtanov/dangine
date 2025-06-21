@@ -35,6 +35,21 @@ public:
 		return out;
 	}
 
+	std::vector<std::string> split(std::string s, std::string delimiter) {
+		size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+		std::string token;
+		std::vector<std::string> res;
+
+		while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos) {
+			token = s.substr(pos_start, pos_end - pos_start);
+			pos_start = pos_end + delim_len;
+			res.push_back(token);
+		}
+
+		res.push_back(s.substr(pos_start));
+		return res;
+	}
+
 	void LoadModel(std::string path)
 	{
 		using namespace std;
@@ -71,11 +86,28 @@ public:
 			}
 			else if (word == "f")
 			{
-				// Cries
+				string face;
+				getline(ssLine, face);
+				string p1, p2, p3;
+				istringstream ssFace{ face };
+				ssFace >> p1;
+				ssFace >> p2;
+				ssFace >> p3;
+				LOG(face);
+				LOG("\t" + p1 + ", " + p2 + ", " + p3);
+
+				auto i1 = split(p1, "/")[0];
+				auto i2 = split(p2, "/")[0];
+				auto i3 = split(p3, "/")[0];
+				vertexIndices.push_back(stoi(i1)-1);
+				vertexIndices.push_back(stoi(i2)-1);
+				vertexIndices.push_back(stoi(i3)-1);
 			}
 		}
 
 		file.close();
+
+		return;
 
 		LOG("Vertex Coords");
 		for (auto v : temp_vertices)
