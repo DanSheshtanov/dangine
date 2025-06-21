@@ -1,7 +1,14 @@
+//struct VIn
+//{
+//    float3 position : POSITION;
+//    float4 colour : COLOR;
+//};
+
 struct VIn
 {
     float3 position : POSITION;
-    float4 colour : COLOR;
+    float2 uv : TEXCOORD;
+    float3 normal : NORMAL;
 };
 
 struct VOut
@@ -22,7 +29,8 @@ VOut main(VIn input)
 {
     VOut output;
     output.position = mul(WVP, float4(input.position, 1));
-    output.colour = input.colour;
+    output.colour = float4(input.normal, 1);
+    //output.colour = input.colour;
 	return output;
 }
 

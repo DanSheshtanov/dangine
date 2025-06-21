@@ -1,128 +1,68 @@
 #pragma once
 #include <vector>
-#include <DirectXMath.h>
 #include <string>
-#include <fstream>
-#include <sstream>
+#include <DirectXMath.h>
 
-#include "Debug.h"
+class Mesh;
+
+struct VertexPosUVNorm
+{
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT2 uv;
+	DirectX::XMFLOAT3 norm;
+};
 
 class ModelLoader
 {
 public:
-	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-	std::vector<DirectX::XMFLOAT3> temp_vertices;
-	std::vector<DirectX::XMFLOAT2> temp_texture_coords;
-	std::vector<DirectX::XMFLOAT3> temp_normals;
-
-
-	DirectX::XMFLOAT3 ParseFloat3(std::string verts)
+	enum class FaceFormat
 	{
-		DirectX::XMFLOAT3 out;
-		std::istringstream ss{ verts };
-		ss >> out.x;
-		ss >> out.y;
-		ss >> out.z;
-		return out;
-	}
+		UNKNOWN, V, V_VT, V_VN, V_VT_VN, FORMAT_ERROR
+	};
 
-	DirectX::XMFLOAT2 ParseFloat2(std::string verts)
+	ModelLoader(std::string path);
+	VertexPosUVNorm* GetVertexData() { return out_verts.data(); }
+	size_t GetVertexCount() { return out_verts.size(); }
+	size_t GetVertexBufferSize() { return out_verts.size() * sizeof(VertexPosUVNorm); }
+
+	unsigned int* GetIndexData() { return out_indices.data(); }
+	size_t GetIndexCount() { return out_indices.size(); }
+	size_t GetIndexBufferSize() { return out_indices.size() * sizeof(unsigned int); }
+
+private:
+	struct FaceIndices
 	{
-		DirectX::XMFLOAT2 out;
-		std::istringstream ss{ verts };
-		ss >> out.x;
-		ss >> out.y;
-		return out;
-	}
+		// 0 is erroneous here as OBJ indices start with 1
+		unsigned int v = 0;
+		unsigned int vt = 0;
+		unsigned int vn = 0;
 
-	std::vector<std::string> split(std::string s, std::string delimiter) {
-		size_t pos_start = 0, pos_end, delim_len = delimiter.length();
-		std::string token;
-		std::vector<std::string> res;
+		FaceIndices() = default;
+		FaceIndices(unsigned int v, unsigned int vt, unsigned int vn)
+			: v(v), vt(vt), vn(vn) {	}
 
-		while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos) {
-			token = s.substr(pos_start, pos_end - pos_start);
-			pos_start = pos_end + delim_len;
-			res.push_back(token);
-		}
-
-		res.push_back(s.substr(pos_start));
-		return res;
-	}
-
-	void LoadModel(std::string path)
-	{
-		using namespace std;
-		using namespace DirectX;
-
-		ifstream file{ path, ifstream::in };
-
-		string line;
-		while (getline(file, line))
+		bool operator==(const FaceIndices& other) const
 		{
-			istringstream ssLine{ line };
-			string word;
-			ssLine >> word;
-			if (word == "v")
-			{
-				string coords;
-				getline(ssLine, coords);
-				XMFLOAT3 out = ParseFloat3(coords);
-				temp_vertices.push_back(out);
-			}
-			else if (word == "vt")
-			{
-				string coords;
-				getline(ssLine, coords);
-				XMFLOAT2 out = ParseFloat2(coords);
-				temp_texture_coords.push_back(out);
-			}
-			else if (word == "vn")
-			{
-				string coords;
-				getline(ssLine, coords);
-				XMFLOAT3 out = ParseFloat3(coords);
-				temp_normals.push_back(out);
-			}
-			else if (word == "f")
-			{
-				string face;
-				getline(ssLine, face);
-				string p1, p2, p3;
-				istringstream ssFace{ face };
-				ssFace >> p1;
-				ssFace >> p2;
-				ssFace >> p3;
-				LOG(face);
-				LOG("\t" + p1 + ", " + p2 + ", " + p3);
-
-				auto i1 = split(p1, "/")[0];
-				auto i2 = split(p2, "/")[0];
-				auto i3 = split(p3, "/")[0];
-				vertexIndices.push_back(stoi(i1)-1);
-				vertexIndices.push_back(stoi(i2)-1);
-				vertexIndices.push_back(stoi(i3)-1);
-			}
+			return (v == other.v) && (vt == other.vt) && (vn == other.vn);
 		}
+	};
 
-		file.close();
+	FaceFormat format;
 
-		return;
+	std::vector<DirectX::XMFLOAT3> read_vertices;
+	std::vector<DirectX::XMFLOAT2> read_uv;
+	std::vector<DirectX::XMFLOAT3> read_normals;
+	std::vector<FaceIndices> face_points;
 
-		LOG("Vertex Coords");
-		for (auto v : temp_vertices)
-		{
-			LOG("+\t" + to_string(v.x) + ", " + to_string(v.y) + ", " + to_string(v.z));
-		}
-		LOG("Texture Coords");
-		for (auto v : temp_texture_coords)
-		{
-			LOG("+\t" + to_string(v.x) + ", " + to_string(v.y));
-		}
-		LOG("Vertex Normals");
-		for (auto v : temp_normals)
-		{
-			LOG("+\t" + to_string(v.x) + ", " + to_string(v.y) + ", " + to_string(v.z));
-		}
-	}
+	std::vector<VertexPosUVNorm> out_verts;
+	std::vector<unsigned int> out_indices;
+
+	void LoadModelData(std::string path);
+
+	FaceFormat DetectFaceFormat(std::string face);
+	void ParseFace(std::string face);
+	DirectX::XMFLOAT3 ParseFloat3(std::string verts);
+	DirectX::XMFLOAT2 ParseFloat2(std::string verts);
+
+	std::vector<std::string> Split(std::string s, std::string delimiter);
 };

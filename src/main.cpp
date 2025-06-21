@@ -38,13 +38,19 @@ int WINAPI WinMain(
 
     // Assets
     Material* mat1 = new Material{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso" };
-    Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon() };
+    Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/monkey.obj"};
+    Mesh* mesh2 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/cube.obj"};
 
     // Scene
     Camera cam;
     cam.transform.position = XMVectorSetZ(cam.transform.position, -5);
-    Entity e{ "Tringle", &mesh1, &mat1};
-    rend.RegisterEntity(&e);
+
+    Entity e1{ "Monkey", &mesh1, &mat1};
+    rend.RegisterEntity(&e1);
+
+    Entity e2{ "Cube", &mesh2, &mat1};
+    rend.RegisterEntity(&e2);
+    e2.transform.Translate({ 3, 1, 0.5f });
 
     // Used to hold windows event messages
     MSG msg;
@@ -67,16 +73,9 @@ int WINAPI WinMain(
             // Game code here
             Time::Update();
 
-            //cam.transform.Translate(XMVECTOR{ 0, 0, -0.05f * Time::GetDeltaTime()});
-            //LOG(std::to_string(XMVectorGetZ(cam.transform.position)));
-
-            XMVECTOR cameraRotation = XMVectorScale({ 0.1, 0.4, 0.05 }, Time::GetDeltaTime());
-            e.transform.Rotate(cameraRotation);
-
-            /*if (XMVectorGetZ(cam.transform.position) < -1.4)
-            {
-                rend.DestroyEntity(&e);
-            }*/
+            XMVECTOR rotation = XMVectorScale({ 0.1, 0.4, 0.05 }, Time::GetDeltaTime());
+            e1.transform.Rotate(rotation);
+            e2.transform.Rotate(XMVectorScale(rotation, 2.5f));
 
             rend.RenderFrame(cam);
         }
