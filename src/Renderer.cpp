@@ -19,11 +19,22 @@ int Renderer::Init(Window* wnd)
 {
 	window = wnd;
 
-    if (InitD3D() != S_OK)
+    HRESULT hr = InitD3D();;
+    if (hr != S_OK)
     {
         MessageBox(NULL, L"Failed to initialise Direct3D!", L"Critical Error!", MB_ICONERROR | MB_OK);
-        return -1;
+        return hr;
     }
+
+    hr = InitDepthBuffer();
+    if (hr != S_OK)
+    {
+        MessageBox(NULL, L"Failed to create depth buffer!", L"Critical Error!", MB_ICONERROR | MB_OK);
+        return hr;
+    }
+
+    // Set the back buffer as the current render target
+    devcon->OMSetRenderTargets(1, &backbuffer, depthBuffer);
 
 #pragma region Stinky CBuffer
     
@@ -48,6 +59,8 @@ void Renderer::RenderFrame(Camera& cam)
     // Clear back buffer with desired colour
     FLOAT bg[4] = { 0.2f, 0.3f, 0.2f, 1.0f };
     devcon->ClearRenderTargetView(backbuffer, bg);
+    devcon->ClearDepthStencilView(depthBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
 
     // Alternatively, include <DirectXColors.h> and do
     // You can press F12 on the Colors or DarkSlateGray to see a list of all colours
@@ -139,9 +152,6 @@ int Renderer::InitD3D()
 
     pBackBufferTexture->Release(); // This object is no longer needed
 
-    // Set the back buffer as the current render target
-    devcon->OMSetRenderTargets(1, &backbuffer, NULL);
-
     // Define and set the viewport
     D3D11_VIEWPORT viewport = {};
     viewport.TopLeftX = 0;
@@ -153,6 +163,49 @@ int Renderer::InitD3D()
     devcon->RSSetViewports(1, &viewport);
 
     return S_OK; // The same as 0, aka no error
+}
+
+int Renderer::InitDepthBuffer()
+{
+    HRESULT hr;
+
+    DXGI_SWAP_CHAIN_DESC scd = {};
+    swapchain->GetDesc(&scd);
+
+    // Z-Buffer texture description
+    D3D11_TEXTURE2D_DESC tex2dDesc = { 0 };
+    tex2dDesc.Width = window->GetWidth();
+    tex2dDesc.Height = window->GetHeight();
+    tex2dDesc.ArraySize = 1;
+    tex2dDesc.MipLevels = 1;
+    tex2dDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    tex2dDesc.SampleDesc.Count = scd.SampleDesc.Count; // Same sample count as swap chain
+    tex2dDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    tex2dDesc.Usage = D3D11_USAGE_DEFAULT;
+
+    // Z-Buffer texure
+    ID3D11Texture2D* zBufferTexture;
+    hr = dev->CreateTexture2D(&tex2dDesc, NULL, &zBufferTexture);
+    if (FAILED(hr))
+    {
+        OutputDebugString(L"Failed to create Z-Buffer Texture!");
+        return E_FAIL;
+    }
+
+    // Create the depth buffer view
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+    ZeroMemory(&dsvDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+    dsvDesc.Format = tex2dDesc.Format;
+    dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    hr = dev->CreateDepthStencilView(zBufferTexture, &dsvDesc, &depthBuffer);
+    if (FAILED(hr))
+    {
+        OutputDebugString(L"Failed to create depth stencil view!");
+        return E_FAIL;
+    }
+    zBufferTexture->Release();
+
+    return S_OK;
 }
 
 void Renderer::CleanD3D()
