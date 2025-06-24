@@ -6,10 +6,15 @@ struct ID3D11PixelShader;
 struct ID3D11InputLayout;
 struct ID3D11Device;
 
+class Texture;
+
 class Material
 {
 public:
-	Material(std::string name, ID3D11Device* dev, std::string vShaderFilename, std::string pShaderFilename);
+	Material(std::string name, ID3D11Device* dev,
+		std::string vShaderFilename, std::string pShaderFilename,
+		Texture* texture);
+
 	void SetActive(ID3D11DeviceContext* devcon);
 private:
 	std::string name;
@@ -19,5 +24,6 @@ private:
 	ID3D11InputLayout* vLayout	= nullptr;
 	ID3D11PixelShader* pShader	= nullptr;
 
+	Texture* texture			= nullptr;
 };
 

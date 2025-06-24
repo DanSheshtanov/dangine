@@ -9,6 +9,7 @@
 #include "Time.h"
 #include "Entity.h"
 #include "ModelLoader.h"
+#include "Texture.h"
 
 
 // Program entry point
@@ -37,15 +38,19 @@ int WINAPI WinMain(
     }
 
     // Assets
-    Material* mat1 = new Material{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso" };
-    Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/monkey.obj"};
+    Texture* texture1 = new Texture{ rend.GetDevice(), rend.GetDeviceCon(), "assets/textures/colormap.png" };
+    Material* mat1 = new Material{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/sub.obj"};
     Mesh* mesh2 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/cube.obj"};
-
     // Scene
     Camera cam;
-    cam.transform.position = XMVectorSetZ(cam.transform.position, -5);
+    cam.transform.position = XMVectorSetX(cam.transform.position, -8);
+    cam.transform.position = XMVectorSetY(cam.transform.position, 4);
+    cam.transform.position = XMVectorSetZ(cam.transform.position, -8);
+    cam.transform.Rotate(XMVECTOR{ -0.3, XM_PIDIV4, 0});
 
     Entity e1{ "Monkey", &mesh1, &mat1};
+    e1.transform.scale = XMVectorSet(10, 10, 10, 1);
     rend.RegisterEntity(&e1);
 
     Entity e2{ "Cube", &mesh2, &mat1};
@@ -74,7 +79,7 @@ int WINAPI WinMain(
             Time::Update();
 
             XMVECTOR rotation = XMVectorScale({ 0.1, 0.4, 0.05 }, Time::GetDeltaTime());
-            e1.transform.Rotate(rotation);
+            //e1.transform.Rotate(rotation);
             e2.transform.Rotate(XMVectorScale(rotation, 2.5f));
 
             rend.RenderFrame(cam);

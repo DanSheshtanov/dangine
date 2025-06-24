@@ -1,11 +1,13 @@
 #include <d3d11.h>
 #include "ShaderLoading.h"
 #include "Debug.h"
+#include "Texture.h"
 #include "Material.h"
 
 Material::Material(std::string name, ID3D11Device* dev,
-	std::string vShaderFilename, std::string pShaderFilename)
-	:name(name), dev(dev)
+	std::string vShaderFilename, std::string pShaderFilename,
+	Texture* texture = nullptr)
+	:name(name), dev(dev), texture(texture)
 {
 	HRESULT hr;
 	hr = ShaderLoading::LoadVertexShader(vShaderFilename, dev, &vShader, &vLayout);
@@ -30,4 +32,13 @@ void Material::SetActive(ID3D11DeviceContext* devcon)
 	devcon->VSSetShader(vShader, 0, 0);
 	devcon->PSSetShader(pShader, 0, 0);
 	devcon->IASetInputLayout(vLayout);
+
+	// TODO funny bug where non-textured mats will render with previous textures
+	if (texture != nullptr)
+	{
+		ID3D11SamplerState* s = texture->GetSampler();
+		devcon->PSSetSamplers(0, 1, &s);
+		ID3D11ShaderResourceView* t = texture->GetTexture();
+		devcon->PSSetShaderResources(0, 1, &t);
+	}
 }

@@ -30,6 +30,7 @@
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Transform.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ModelLoader.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\Transform.h" />
+    <ClInclude Include="src\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
