@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Windows.h>
+#include <Keyboard.h>
+#include <Mouse.h>
 
 class Window
 {
@@ -15,6 +17,9 @@ private:
 	HWND handle = 0;
 	HINSTANCE hInst;
 	int width = 1, height = 1;
+
+	DirectX::Keyboard keyboard;
+	DirectX::Mouse mouse;
 
 	static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 };

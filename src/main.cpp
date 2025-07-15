@@ -19,10 +19,6 @@ int WINAPI WinMain(
     _In_ LPSTR lpCmdLine,
     _In_ int nCmdShow)
 {
-
-    //ModelLoader ml;
-    //ml.LoadModel("assets/models/cube.obj");
-
     Window wnd{ 800, 600, hInstance, nCmdShow };
     if (!wnd.Exists())
     {
@@ -81,6 +77,16 @@ int WINAPI WinMain(
             XMVECTOR rotation = XMVectorScale({ 0.1, 0.4, 0.05 }, Time::GetDeltaTime());
             //e1.transform.Rotate(rotation);
             e2.transform.Rotate(XMVectorScale(rotation, 2.5f));
+            
+            auto kbState = Keyboard::Get().GetState();
+            auto msState = Mouse::Get().GetState();
+            if (kbState.W)
+                cam.transform.Translate(cam.transform.GetForward() * 5 * Time::GetDeltaTime());
+            if (kbState.S)
+                cam.transform.Translate(-cam.transform.GetForward() * 5 * Time::GetDeltaTime());
+            if (msState.leftButton)
+                cam.transform.position = XMVectorSet(0, 0, 0, 0);
+            cam.transform.Rotate(XMVECTOR{ -(float)msState.y, (float)msState.x } *0.001f);
 
             rend.RenderFrame(cam);
         }

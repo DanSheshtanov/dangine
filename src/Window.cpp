@@ -1,5 +1,9 @@
-#include "Window.h"
+
 #include "Debug.h"
+
+#include "Window.h"
+
+using namespace DirectX;
 
 const wchar_t* windowName = L"DirectX Hello World!"; // Wide char array
 
@@ -59,7 +63,9 @@ Window::Window(int width, int height, HINSTANCE hInstance, int nCmdShow)
         MessageBox(NULL, L"Failed to create window", L"Critical Error!", MB_ICONERROR | MB_OK);
     }
 
-
+    mouse.SetWindow(handle);
+    mouse.SetMode(Mouse::MODE_RELATIVE);
+    //mouse.SetVisible(false);
 }
 
 LRESULT Window::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -77,8 +83,24 @@ LRESULT Window::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         return 0;
     }
 
-    // Key being pressed down events
+    // Keyboard Inputs
+    case WM_ACTIVATE:
+    case WM_ACTIVATEAPP:
+    case WM_INPUT:
+        Keyboard::ProcessMessage(message, wParam, lParam);
+        Mouse::ProcessMessage(message, wParam, lParam);
+        break;
+
+    case WM_SYSKEYDOWN:
+        if (wParam == VK_RETURN && (lParam & 0x60000000) == 0x20000000)
+        {
+            // This is where you'd implement the classic ALT+ENTER hotkey for fullscreen toggle
+        }
+        Keyboard::ProcessMessage(message, wParam, lParam);
+        break;
+
     case WM_KEYDOWN:
+        Keyboard::ProcessMessage(message, wParam, lParam);
         switch (wParam)
         {
         case VK_ESCAPE:
@@ -86,10 +108,33 @@ LRESULT Window::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
             // Destroying the window will post a WM_DESTROY which will lead to
             // PostQuitMessage(0) being called.
             break;
-        case 'W':
+        //case 'W':
             // W key was pressed
             break;
         }
+    case WM_KEYUP:
+    case WM_SYSKEYUP:
+        Keyboard::ProcessMessage(message, wParam, lParam);
+        break;
+
+    case WM_MOUSEACTIVATE:
+        // This will ignore mouse clicks that regain focus on the window.
+        // Good practice to prevent player "misinputs" when they click into the window.
+        return MA_ACTIVATEANDEAT;
+
+    case WM_MOUSEMOVE:
+    case WM_LBUTTONDOWN:
+    case WM_LBUTTONUP:
+    case WM_RBUTTONDOWN:
+    case WM_RBUTTONUP:
+    case WM_MBUTTONDOWN:
+    case WM_MBUTTONUP:
+    case WM_MOUSEWHEEL:
+    case WM_XBUTTONDOWN:
+    case WM_XBUTTONUP:
+    case WM_MOUSEHOVER:
+        Mouse::ProcessMessage(message, wParam, lParam);
+        break;
 
     default:
         // Let windows handle everything else with default handling
