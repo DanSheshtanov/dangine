@@ -45,11 +45,44 @@ XMVECTOR Transform::GetForward()
         cos(pitch) * sin(yaw),  // X
         sin(pitch),             // Y
         cos(pitch) * cos(yaw),  // Z
-        0
+        0.0f
     };
     
 
     return XMVector3Normalize(direction);
+}
+
+XMVECTOR Transform::GetRight()
+{
+    float pitch = XMVectorGetX(eulerRotation);
+    float yaw = XMVectorGetY(eulerRotation);
+    float roll = XMVectorGetZ(eulerRotation);
+    
+    XMVECTOR direction
+    {
+        cos(roll)* cos(yaw) + sin(roll) * sin(pitch) * sin(yaw),    // X
+        sin(roll)* cos(pitch),                                      // Y
+        cos(roll) * -sin(yaw) + sin(roll) * sin(pitch) * cos(yaw),  // Z
+        0.0f
+    };
+
+    // This works without camera roll
+    //XMVECTOR direction
+    //{
+    //    sin(yaw + XM_PIDIV2), // X
+    //    0.0f,                 // Y
+    //    cos(yaw + XM_PIDIV2), // Z
+    //    0.0f
+    //};
+
+    return XMVector3Normalize(direction);
+}
+
+XMVECTOR Transform::GetUp()
+{
+    XMVECTOR cross = XMVector3Cross(GetForward(), GetRight());
+
+    return XMVector3Normalize(cross);
 }
 
 XMMATRIX Transform::GetWorldMatrix()

@@ -38,12 +38,10 @@ int WINAPI WinMain(
     Material* mat1 = new Material{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
     Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/sub.obj"};
     Mesh* mesh2 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/cube.obj"};
+
     // Scene
     Camera cam;
-    cam.transform.position = XMVectorSetX(cam.transform.position, -8);
-    cam.transform.position = XMVectorSetY(cam.transform.position, 4);
     cam.transform.position = XMVectorSetZ(cam.transform.position, -8);
-    cam.transform.Rotate(XMVECTOR{ -0.3, XM_PIDIV4, 0});
 
     Entity e1{ "Monkey", &mesh1, &mat1};
     e1.transform.scale = XMVectorSet(10, 10, 10, 1);
@@ -75,7 +73,6 @@ int WINAPI WinMain(
             Time::Update();
 
             XMVECTOR rotation = XMVectorScale({ 0.1, 0.4, 0.05 }, Time::GetDeltaTime());
-            //e1.transform.Rotate(rotation);
             e2.transform.Rotate(XMVectorScale(rotation, 2.5f));
             
             auto kbState = Keyboard::Get().GetState();
@@ -84,6 +81,14 @@ int WINAPI WinMain(
                 cam.transform.Translate(cam.transform.GetForward() * 5 * Time::GetDeltaTime());
             if (kbState.S)
                 cam.transform.Translate(-cam.transform.GetForward() * 5 * Time::GetDeltaTime());
+            if(kbState.D)
+                cam.transform.Translate(cam.transform.GetRight() * 5 * Time::GetDeltaTime());
+            if (kbState.A)
+                cam.transform.Translate(-cam.transform.GetRight() * 5 * Time::GetDeltaTime());
+            if (kbState.E)
+                cam.transform.Translate(cam.transform.GetUp() * 5 * Time::GetDeltaTime());
+            if (kbState.Q)
+                cam.transform.Translate(-cam.transform.GetUp() * 5 * Time::GetDeltaTime());
             if (msState.leftButton)
                 cam.transform.position = XMVectorSet(0, 0, 0, 0);
             cam.transform.Rotate(XMVECTOR{ -(float)msState.y, (float)msState.x } *0.001f);

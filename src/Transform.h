@@ -17,6 +17,8 @@ public:
 	void Rotate(XMVECTOR rotation);
 
 	XMVECTOR GetForward();
+	XMVECTOR GetRight();
+	XMVECTOR GetUp();
 	XMMATRIX GetWorldMatrix();
 };
 
