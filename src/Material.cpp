@@ -25,7 +25,7 @@ Material::Material(std::string name, ID3D11Device* dev,
 	}
 }
 
-void Material::SetActive(ID3D11DeviceContext* devcon)
+void Material::Bind(ID3D11DeviceContext* devcon)
 {
 	//dev->GetImmediateContext
 

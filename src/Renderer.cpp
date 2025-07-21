@@ -78,7 +78,7 @@ void Renderer::RenderFrame(Camera& cam)
         devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer_values, 0, 0);
         devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 
-        (*entity->material)->SetActive(devcon);
+        (*entity->material)->Bind(devcon);
         (*entity->mesh)->Render();
     }
 
