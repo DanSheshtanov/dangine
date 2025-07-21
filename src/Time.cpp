@@ -6,6 +6,7 @@
 #define clock std::chrono::steady_clock
 
 float Time::deltaTime = 0;
+float Time::elapsedTime = 0;
 
 void Time::Update()
 {
@@ -15,6 +16,8 @@ void Time::Update()
 	clock::time_point now = clock::now();
 	deltaTime = chrono::duration_cast<chrono::microseconds>(now - last).count() / 1000000.0f;
 	last = now;
+
+	elapsedTime += deltaTime;
 }
 
 void Time::ThreadSleep(int milliseconds)
