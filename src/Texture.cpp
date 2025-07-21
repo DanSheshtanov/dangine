@@ -1,8 +1,8 @@
-//#include "WICTextureLoader.h"
-#include <d3d11.h>
-#include <WICTextureLoader.h>
-
 #include "Texture.h"
+
+#include <WICTextureLoader.h>
+#include <d3d11.h>
+
 
 Texture::Texture(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string path)
 {

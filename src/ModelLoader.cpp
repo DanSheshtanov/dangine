@@ -1,8 +1,9 @@
+#include "ModelLoader.h"
+
 #include <fstream>
 #include <sstream>
 
 #include "Debug.h"
-#include "ModelLoader.h"
 
 DirectX::XMFLOAT3 ModelLoader::ParseFloat3(std::string verts)
 {
@@ -96,33 +97,33 @@ void ModelLoader::ParseFace(std::string face)
 	if (p1it == face_points.end())
 	{
 		face_points.push_back(p1);
-		out_indices.push_back(face_points.size() - 1);
+		out_indices.push_back((unsigned int)face_points.size() - 1);
 	}
 	else
 	{
-		out_indices.push_back(std::distance(face_points.begin(), p1it));
+		out_indices.push_back((unsigned int)std::distance(face_points.begin(), p1it));
 	}
 
 	auto p2it = std::find(face_points.begin(), face_points.end(), p2);
 	if (p2it == face_points.end())
 	{
 		face_points.push_back(p2);
-		out_indices.push_back(face_points.size() - 1);
+		out_indices.push_back((unsigned int)face_points.size() - 1);
 	}
 	else
 	{
-		out_indices.push_back(std::distance(face_points.begin(), p2it));
+		out_indices.push_back((unsigned int)std::distance(face_points.begin(), p2it));
 	}
 
 	auto p3it = std::find(face_points.begin(), face_points.end(), p3);
 	if (p3it == face_points.end())
 	{
 		face_points.push_back(p3);
-		out_indices.push_back(face_points.size() - 1);
+		out_indices.push_back((unsigned int)face_points.size() - 1);
 	}
 	else
 	{
-		out_indices.push_back(std::distance(face_points.begin(), p3it));
+		out_indices.push_back((unsigned int)std::distance(face_points.begin(), p3it));
 	}
 }
 

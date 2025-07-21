@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include <DirectXMath.h>
+
 XMMATRIX Camera::GetViewMatrix()
 {
 	return XMMatrixLookToLH(

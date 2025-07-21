@@ -1,12 +1,12 @@
 ﻿#include <Windows.h>
 
 #include "Debug.h"
+#include "Time.h"
 #include "Window.h"
 #include "Renderer.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "Camera.h"
-#include "Time.h"
 #include "Entity.h"
 #include "ModelLoader.h"
 #include "Texture.h"
@@ -72,7 +72,7 @@ int WINAPI WinMain(
             // Game code here
             Time::Update();
 
-            XMVECTOR rotation = XMVectorScale({ 0.1, 0.4, 0.05 }, Time::GetDeltaTime());
+            XMVECTOR rotation = XMVectorScale({ 0.1f, 0.4f, 0.05f }, Time::GetDeltaTime());
             e2.transform.Rotate(XMVectorScale(rotation, 2.5f));
             
             auto kbState = Keyboard::Get().GetState();

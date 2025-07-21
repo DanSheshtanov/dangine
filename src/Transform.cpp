@@ -12,39 +12,13 @@ void Transform::Rotate(XMVECTOR rotation)
 
 XMVECTOR Transform::GetForward()
 {
-    // Got Right
-    //XMVECTOR direction
-    //{
-    //    cos(XMVectorGetX(eulerRotation)) * cos(XMVectorGetY(eulerRotation)),// X
-    //    sin(XMVectorGetX(eulerRotation)),                                   // Y
-    //    cos(XMVectorGetX(eulerRotation)) * sin(XMVectorGetY(eulerRotation)),// Z
-    //    1
-    //};
-
-    // Got Up
-    //XMVECTOR direction
-    //{
-    //    cos(XMVectorGetY(eulerRotation)) * sin(XMVectorGetX(eulerRotation)),// X
-    //    cos(XMVectorGetX(eulerRotation)),                                   // Y
-    //    cos(XMVectorGetY(eulerRotation)) * sin(XMVectorGetX(eulerRotation)),// Z
-    //    0
-    //};
-
-    //XMVECTOR direction
-    //{
-    //    sin(XMVectorGetY(eulerRotation)) * sin(XMVectorGetX(eulerRotation)),// X
-    //    cos(XMVectorGetX(eulerRotation)),                                   // Y
-    //    cos(XMVectorGetY(eulerRotation)) * sin(XMVectorGetX(eulerRotation)),// Z
-    //    0
-    //};
-
     float pitch = XMVectorGetX(eulerRotation);
     float yaw = XMVectorGetY(eulerRotation);
     XMVECTOR direction
     {
-        cos(pitch) * sin(yaw),  // X
-        sin(pitch),             // Y
-        cos(pitch) * cos(yaw),  // Z
+        cosf(pitch) * sinf(yaw), // X
+        sinf(pitch),             // Y
+        cosf(pitch) * cosf(yaw), // Z
         0.0f
     };
     
@@ -60,9 +34,9 @@ XMVECTOR Transform::GetRight()
     
     XMVECTOR direction
     {
-        cos(roll)* cos(yaw) + sin(roll) * sin(pitch) * sin(yaw),    // X
-        sin(roll)* cos(pitch),                                      // Y
-        cos(roll) * -sin(yaw) + sin(roll) * sin(pitch) * cos(yaw),  // Z
+        cosf(roll) * cosf(yaw) + sinf(roll) * sinf(pitch) * sinf(yaw),  // X
+        sinf(roll) * cosf(pitch),                                       // Y
+        cosf(roll) * -sinf(yaw) + sinf(roll) * sinf(pitch) * cosf(yaw), // Z
         0.0f
     };
 

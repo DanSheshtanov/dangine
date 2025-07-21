@@ -1,10 +1,11 @@
+#include "Mesh.h"
+
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <DirectXColors.h>
 
-#include "Debug.h"
-#include "Mesh.h"
 #include "ModelLoader.h"
+#include "Debug.h"
 
 using namespace DirectX;
 
@@ -22,7 +23,7 @@ Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string objPath)
     // Create the vertex buffer
     D3D11_BUFFER_DESC bd = { 0 };
     bd.Usage = D3D11_USAGE_DYNAMIC; // Dynamic allows CPU-write and GPU-read
-    bd.ByteWidth = ml.GetVertexBufferSize(); // Size of buffer - sizeof vertex * num of vertices
+    bd.ByteWidth = (int)ml.GetVertexBufferSize(); // Size of buffer - sizeof vertex * num of vertices
     //bd.ByteWidth = sizeof(vertices); // Alternatively can also be this for simplicty
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER; // Use as vertex buffer
     bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // Allow CPU to write in buffer
@@ -43,13 +44,13 @@ Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string objPath)
 
     D3D11_BUFFER_DESC indexBD = { 0 };
     indexBD.Usage = D3D11_USAGE_DEFAULT;
-    indexBD.ByteWidth = ml.GetIndexBufferSize();
+    indexBD.ByteWidth = (int)ml.GetIndexBufferSize();
     indexBD.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
     D3D11_SUBRESOURCE_DATA initData = { 0 };
     initData.pSysMem = ml.GetIndexData();
 
-    indexCount = ml.GetIndexCount();
+    indexCount = (int)ml.GetIndexCount();
 
     if (FAILED(dev->CreateBuffer(&indexBD, &initData, &iBuffer)))
     {

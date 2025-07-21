@@ -1,6 +1,5 @@
 #pragma once
 
-#include <DirectXMath.h>
 #include "Transform.h"
 
 using namespace DirectX;
@@ -14,7 +13,7 @@ public:
 	float nearClippingPlane = 0.1f;
 	float farClippingPlane = 100.0f;
 
-	XMMATRIX GetViewMatrix();
-	XMMATRIX GetProjectionMatrix(int screenWidth, int screenHeight);
+	DirectX::XMMATRIX GetViewMatrix();
+	DirectX::XMMATRIX GetProjectionMatrix(int screenWidth, int screenHeight);
 };
 

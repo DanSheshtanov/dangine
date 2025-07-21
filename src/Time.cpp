@@ -1,7 +1,8 @@
-#include <thread>
-#include <chrono>
-
 #include "Time.h"
+
+#include <chrono>
+#include <thread>
+
 
 #define clock std::chrono::steady_clock
 

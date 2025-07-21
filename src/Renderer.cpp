@@ -1,15 +1,16 @@
+#include "Renderer.h"
+
 #include <d3d11.h>
 #include <algorithm> // std::find()
 
 #include "Window.h"
-#include "Renderer.h"
-#include "Debug.h"
-
-#include "Material.h"
 #include "Mesh.h"
+#include "Material.h"
 #include "Camera.h"
+#include "Debug.h"
 #include "Entity.h"
 #include "Time.h"
+
 
 const UINT cbufferPerFrameIndex = 13;
 const UINT cbufferPerObjectIndex = 12;
@@ -180,8 +181,8 @@ int Renderer::InitD3D()
     D3D11_VIEWPORT viewport = {};
     viewport.TopLeftX = 0;
     viewport.TopLeftY = 0;
-    viewport.Width = window->GetWidth();
-    viewport.Height = window->GetHeight();
+    viewport.Width = (float)window->GetWidth();
+    viewport.Height = (float)window->GetHeight();
     viewport.MinDepth = 0;
     viewport.MaxDepth = 1;
     devcon->RSSetViewports(1, &viewport);

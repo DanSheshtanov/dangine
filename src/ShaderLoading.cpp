@@ -1,10 +1,11 @@
+#include "ShaderLoading.h"
+
 #include <d3d11.h>
 #include <d3d11shader.h>
 #include <d3dcompiler.h>
 
-#include "Debug.h"
 #include "ReadData.h"
-#include "ShaderLoading.h"
+#include "Debug.h"
 
 namespace ShaderLoading
 {

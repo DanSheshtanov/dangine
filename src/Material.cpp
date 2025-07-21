@@ -1,8 +1,10 @@
+#include "Material.h"
+
 #include <d3d11.h>
+
+#include "Texture.h"
 #include "ShaderLoading.h"
 #include "Debug.h"
-#include "Texture.h"
-#include "Material.h"
 
 Material::Material(std::string name, ID3D11Device* dev,
 	std::string vShaderFilename, std::string pShaderFilename,
