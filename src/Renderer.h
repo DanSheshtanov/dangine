@@ -35,7 +35,8 @@ private:
 	ID3D11DepthStencilView* depthBuffer = NULL; // the pointer to our depth buffer
 
 
-	ID3D11Buffer* pCBuffer = NULL;
+	ID3D11Buffer* cbufferPerFrame = NULL;
+	ID3D11Buffer* cbufferPerObject = NULL;
 
 	std::vector<Entity*> drawnEntities;
 

@@ -50,6 +50,7 @@
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
+    <None Include="src\shaders\Common.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\shaders\PixelShader.hlsl">

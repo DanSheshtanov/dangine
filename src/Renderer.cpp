@@ -9,11 +9,21 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "Entity.h"
+#include "Time.h"
 
-struct CONSTANT_BUFFER0
+const UINT cbufferPerFrameIndex = 13;
+const UINT cbufferPerObjectIndex = 12;
+struct CBuffer_PerFrame
+{
+    FLOAT time;     // 4 bytes
+    XMFLOAT3 packing;
+};
+
+struct CBuffer_PerObject
 {
     XMMATRIX WVP;   // 64 bytes (4x4 = 16 floats. 16x4 bytes each = 64 bytes total)
 };
+
 
 int Renderer::Init(Window* wnd)
 {
@@ -41,9 +51,19 @@ int Renderer::Init(Window* wnd)
     D3D11_BUFFER_DESC cbd;
     ZeroMemory(&cbd, sizeof(cbd));
     cbd.Usage = D3D11_USAGE_DEFAULT;
-    cbd.ByteWidth = sizeof(CONSTANT_BUFFER0);
+    cbd.ByteWidth = sizeof(CBuffer_PerFrame);
     cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    if (FAILED(dev->CreateBuffer(&cbd, NULL, &pCBuffer)))
+    if (FAILED(dev->CreateBuffer(&cbd, NULL, &cbufferPerFrame)))
+    {
+        LOG("Oops, failed to create CBuffer.");
+        return -1;
+    }
+
+    ZeroMemory(&cbd, sizeof(cbd));
+    cbd.Usage = D3D11_USAGE_DEFAULT;
+    cbd.ByteWidth = sizeof(CBuffer_PerObject);
+    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    if (FAILED(dev->CreateBuffer(&cbd, NULL, &cbufferPerObject)))
     {
         LOG("Oops, failed to create CBuffer.");
         return -1;
@@ -60,8 +80,6 @@ void Renderer::RenderFrame(Camera& cam)
     FLOAT bg[4] = { 0.2f, 0.3f, 0.2f, 1.0f };
     devcon->ClearRenderTargetView(backbuffer, bg);
     devcon->ClearDepthStencilView(depthBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-
-
     // Alternatively, include <DirectXColors.h> and do
     // You can press F12 on the Colors or DarkSlateGray to see a list of all colours
     // Adding a using namespace DirectX will make it less cumbersome to use this
@@ -70,13 +88,19 @@ void Renderer::RenderFrame(Camera& cam)
     XMMATRIX view = cam.GetViewMatrix();
     XMMATRIX proj = cam.GetProjectionMatrix(window->GetWidth(), window->GetHeight());
 
-    CONSTANT_BUFFER0 cBuffer_values;
+    // Per frame CBuffer
+    CBuffer_PerFrame cbufferPerFrameValues;
+    cbufferPerFrameValues.time = Time::GetElapsedTime();
+    devcon->UpdateSubresource(cbufferPerFrame, 0, 0, &cbufferPerFrameValues, 0, 0);
+    devcon->VSSetConstantBuffers(cbufferPerFrameIndex, 1, &cbufferPerFrame);
+
+    CBuffer_PerObject cBuf1_values;
 
     for (auto entity : drawnEntities)
     {
-        cBuffer_values.WVP = entity->transform.GetWorldMatrix() * view * proj;
-        devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer_values, 0, 0);
-        devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
+        cBuf1_values.WVP = entity->transform.GetWorldMatrix() * view * proj;
+        devcon->UpdateSubresource(cbufferPerObject, 0, 0, &cBuf1_values, 0, 0);
+        devcon->VSSetConstantBuffers(cbufferPerObjectIndex, 1, &cbufferPerObject);
 
         (*entity->material)->Bind(devcon);
         (*entity->mesh)->Render();
