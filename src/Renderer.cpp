@@ -5,11 +5,11 @@
 
 #include "Window.h"
 #include "Mesh.h"
-#include "Material.h"
+#include "materials/Material.h"
 #include "Camera.h"
 #include "Debug.h"
 #include "Entity.h"
-#include "Time.h"
+#include "TimeSystem.h"
 
 
 const UINT cbufferPerFrameIndex = 13;

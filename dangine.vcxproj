@@ -19,32 +19,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Material_Waves.cpp" />
+    <ClCompile Include="src\materials\Material_Lit.cpp" />
+    <ClCompile Include="src\materials\Material_Waves.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
-    <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\materials\Material.cpp" />
     <ClCompile Include="src\ShaderLoading.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\TimeSystem.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Transform.cpp" />
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Material_Waves.h" />
+    <ClInclude Include="src\materials\Material_Lit.h" />
+    <ClInclude Include="src\materials\Material_Waves.h" />
     <ClInclude Include="src\ModelLoader.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Mesh.h" />
-    <ClInclude Include="src\Material.h" />
+    <ClInclude Include="src\materials\Material.h" />
     <ClInclude Include="src\ReadData.h" />
     <ClInclude Include="src\ShaderLoading.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Debug.h" />
-    <ClInclude Include="src\Time.h" />
+    <ClInclude Include="src\TimeSystem.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\Texture.h" />
@@ -69,6 +71,16 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Compiled Shaders\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Compiled Shaders\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Compiled Shaders\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Compiled Shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="src\shaders\VShaderLit.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Compiled Shaders\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Compiled Shaders\%(Filename).cso</ObjectFileOutput>
@@ -145,6 +157,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -168,6 +181,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,6 +203,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -212,6 +227,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

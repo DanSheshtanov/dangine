@@ -1,11 +1,11 @@
 ﻿#include <Windows.h>
 
 #include "Debug.h"
-#include "Time.h"
+#include "TimeSystem.h"
 #include "Window.h"
 #include "Renderer.h"
-#include "Material.h"
-#include "Material_Waves.h"
+#include "materials/Material.h"
+#include "materials/Material_Waves.h"
 #include "Mesh.h"
 #include "Camera.h"
 #include "Entity.h"
