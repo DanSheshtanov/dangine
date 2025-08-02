@@ -14,6 +14,7 @@
 
 const UINT cbufferPerFrameIndex = 13;
 const UINT cbufferPerObjectIndex = 12;
+
 struct CBuffer_PerFrame
 {
     FLOAT time;     // 4 bytes
@@ -47,8 +48,7 @@ int Renderer::Init(Window* wnd)
     // Set the back buffer as the current render target
     devcon->OMSetRenderTargets(1, &backbuffer, depthBuffer);
 
-#pragma region Stinky CBuffer
-    
+    // Constant buffers used on all materials    
     D3D11_BUFFER_DESC cbd;
     ZeroMemory(&cbd, sizeof(cbd));
     cbd.Usage = D3D11_USAGE_DEFAULT;
@@ -69,7 +69,6 @@ int Renderer::Init(Window* wnd)
         LOG("Oops, failed to create CBuffer.");
         return -1;
     }
-#pragma endregion
 
     return S_OK;
 }
@@ -103,6 +102,7 @@ void Renderer::RenderFrame(Camera& cam)
         devcon->UpdateSubresource(cbufferPerObject, 0, 0, &cBuf1_values, 0, 0);
         devcon->VSSetConstantBuffers(cbufferPerObjectIndex, 1, &cbufferPerObject);
 
+        (*entity->material)->UpdateMaterial(entity);
         (*entity->material)->Bind();
         (*entity->mesh)->Render();
     }

@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "Material.h"
+#include "Material_Waves.h"
 #include "Mesh.h"
 #include "Camera.h"
 #include "Entity.h"
@@ -36,6 +37,8 @@ int WINAPI WinMain(
     // Assets
     Texture* texture1 = new Texture{ rend.GetDevice(), rend.GetDeviceCon(), "assets/textures/colormap.png" };
     Material* mat1 = new Material{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Material* mat2 = new Material{ "mat2", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Material_Waves* mat_waves = new Material_Waves{ "Waves", rend.GetDevice(),"Compiled Shaders/VShaderWaves.cso", "Compiled Shaders/PixelShader.cso", texture1 };
     Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/sub.obj"};
     Mesh* mesh2 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/cube.obj"};
 
@@ -43,7 +46,7 @@ int WINAPI WinMain(
     Camera cam;
     cam.transform.position = XMVectorSetZ(cam.transform.position, -8);
 
-    Entity e1{ "Monkey", &mesh1, &mat1};
+    Entity e1{ "Sub", &mesh1, (Material**)&mat_waves};
     e1.transform.scale = XMVectorSet(10, 10, 10, 1);
     rend.RegisterEntity(&e1);
 
