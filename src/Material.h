@@ -16,7 +16,7 @@ public:
 		std::string vShaderFilename, std::string pShaderFilename,
 		Texture* texture);
 
-	void Bind(ID3D11DeviceContext* devcon);
+	void Bind();
 private:
 	std::string name;
 
