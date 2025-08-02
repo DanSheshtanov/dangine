@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "materials/Material.h"
+#include "materials/Material_Lit.h"
 #include "materials/Material_Waves.h"
 #include "Mesh.h"
 #include "Camera.h"
@@ -36,9 +37,9 @@ int WINAPI WinMain(
 
     // Assets
     Texture* texture1 = new Texture{ rend.GetDevice(), rend.GetDeviceCon(), "assets/textures/colormap.png" };
-    Material* mat1 = new Material{ "mat1", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
-    Material* mat2 = new Material{ "mat2", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
-    Material_Waves* mat_waves = new Material_Waves{ "Waves", rend.GetDevice(),"Compiled Shaders/VShaderWaves.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Material* mat_standard = new Material{ "m_standard", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Material_Lit* mat_lit = new Material_Lit{ "m_lit", rend.GetDevice(), "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Material_Waves* mat_waves = new Material_Waves{ "m_waves", rend.GetDevice(),"Compiled Shaders/VShaderWaves.cso", "Compiled Shaders/PixelShader.cso", texture1 };
     Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/sub.obj"};
     Mesh* mesh2 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/cube.obj"};
 
@@ -50,9 +51,13 @@ int WINAPI WinMain(
     e1.transform.scale = XMVectorSet(10, 10, 10, 1);
     rend.RegisterEntity(&e1);
 
-    Entity e2{ "Cube", &mesh2, &mat1};
+    Entity e2{ "Cube", &mesh2, &mat_standard};
     rend.RegisterEntity(&e2);
     e2.transform.Translate({ 3, 1, 0.5f });
+
+    Entity e3{ "Cube", &mesh2, (Material**)&mat_lit};
+    rend.RegisterEntity(&e3);
+    e3.transform.Translate({ -3, 1, 0.5f });
 
     // Used to hold windows event messages
     MSG msg;
@@ -77,6 +82,7 @@ int WINAPI WinMain(
 
             XMVECTOR rotation = XMVectorScale({ 0.1f, 0.4f, 0.05f }, Time::GetDeltaTime());
             e2.transform.Rotate(XMVectorScale(rotation, 2.5f));
+            e3.transform.Rotate(XMVectorScale(-rotation, 2.5f));
             
             auto kbState = Keyboard::Get().GetState();
             auto msState = Mouse::Get().GetState();

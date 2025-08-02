@@ -3,11 +3,10 @@
 
 #include <DirectXMath.h>
 
-class Material_Waves :
-    public Material
+class Material_Waves : public Material
 {
 public:
-    struct CBufferWaves
+    struct CBufferWaves : CBufferBase
     {
         float waveSpeed = 1;
         DirectX::XMFLOAT3 padding;
@@ -17,11 +16,6 @@ public:
         std::string vShaderFilename, std::string pShaderFilename,
         Texture* texture);
 
-    virtual void Bind() override;
     virtual void UpdateMaterial(Entity* entity) override;
-
-
-private:
-    ID3D11Buffer* constantBuffer;
 };
 

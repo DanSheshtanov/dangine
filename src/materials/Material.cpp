@@ -44,4 +44,29 @@ void Material::Bind()
 		ID3D11ShaderResourceView* t = texture->GetTexture();
 		devcon->PSSetShaderResources(0, 1, &t);
 	}
+
+	if (cbuffer != nullptr)
+	{
+		devcon->VSSetConstantBuffers(0, 1, &cbuffer);
+	}
+}
+
+void Material::CreateCBuffer(unsigned int byteWidth)
+{
+	D3D11_BUFFER_DESC cbd{ 0 };
+	cbd.Usage = D3D11_USAGE_DEFAULT;
+	cbd.ByteWidth = byteWidth;
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	if (FAILED(dev->CreateBuffer(&cbd, NULL, &cbuffer)))
+	{
+		LOG("Oops, failed to create CBuffer for material " + name);
+	}
+}
+
+void Material::UpdateCBuffer(CBufferBase& cbData)
+{
+	ID3D11DeviceContext* devcon;
+	dev->GetImmediateContext(&devcon);
+
+	devcon->UpdateSubresource(cbuffer, 0, 0, &cbData, 0, 0);
 }

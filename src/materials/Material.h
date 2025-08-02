@@ -6,7 +6,7 @@ struct ID3D11PixelShader;
 struct ID3D11InputLayout;
 struct ID3D11Device;
 struct ID3D11DeviceContext;
-struct ID3D11Buffer; // Not used here but useful for child materials
+struct ID3D11Buffer;
 
 class Texture;
 class Entity;
@@ -18,11 +18,16 @@ public:
 		std::string vShaderFilename, std::string pShaderFilename,
 		Texture* texture);
 
-	virtual void Bind();
+	void Bind();
 
 	virtual void UpdateMaterial(Entity* entity) {}
 
 protected:
+	struct CBufferBase
+	{
+
+	};
+
 	std::string name;
 
 	ID3D11Device* dev			= nullptr;
@@ -31,5 +36,10 @@ protected:
 	ID3D11PixelShader* pShader	= nullptr;
 
 	Texture* texture			= nullptr;
+
+	ID3D11Buffer* cbuffer = nullptr;
+
+	void CreateCBuffer(unsigned int byteWidth);
+	void UpdateCBuffer(CBufferBase& cbData);
 };
 
