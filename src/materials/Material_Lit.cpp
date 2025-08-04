@@ -18,9 +18,9 @@ void Material_Lit::UpdateMaterial(Entity* entity)
 
 	CBufferLighting cbData;
 	cbData.ambientLight = { 0.3f,0.1f,0.1f,1.f };
-	cbData.directionalLightCol = XMVECTOR{ 1,1,0.9f,1 };
+	cbData.directionalLight.colour = XMVECTOR{ 1,1,0.9f,1 };
 	XMMATRIX transpose = XMMatrixTranspose(entity->transform.GetWorldMatrix()); // Transpose rotations
-	cbData.directionalLightDir = XMVector3Transform(XMVECTOR{ 0, 1, 0 }, transpose);
+	cbData.directionalLight.transposedDirection = XMVector3Transform(XMVECTOR{ 0, 1, 0 }, transpose);
 	UpdateCBuffer(cbData);
 }
 

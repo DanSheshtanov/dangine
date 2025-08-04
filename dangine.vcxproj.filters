@@ -109,6 +109,7 @@
     <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
     <None Include="src\shaders\Common.hlsli" />
+    <None Include="src\shaders\Lighting.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\shaders\PixelShader.hlsl" />

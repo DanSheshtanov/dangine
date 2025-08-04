@@ -6,11 +6,15 @@
 class Material_Lit : public Material
 {
 public:
+    struct DirectionalLight
+    {
+        DirectX::XMVECTOR transposedDirection;
+        DirectX::XMVECTOR colour;
+    };
     struct CBufferLighting : CBufferBase
     {
         DirectX::XMVECTOR ambientLight{ 1,1,1,1 };
-        DirectX::XMVECTOR directionalLightDir{ 0,1,0,1 };
-        DirectX::XMVECTOR directionalLightCol{ 1,1,1,1 };
+        DirectionalLight directionalLight;
     };
 
 	Material_Lit(std::string name, ID3D11Device* dev,
