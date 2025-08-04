@@ -1,5 +1,18 @@
 #include "Common.hlsli"
 
+#define MAX_POINT_LIGHTS 8
+
+//struct PointLight
+//{
+//    float4 position; // 16 bytes
+    
+//    float4 colour; // 16 bytes
+    
+//    float strength; // 4 bytes
+//    bool enabled; // 4 bytes
+//    float2 padding; // 8 bytes
+//};
+
 struct VOut
 {
     float4 position : SV_Position;
@@ -9,14 +22,49 @@ struct VOut
 
 cbuffer LightingData
 {
-    float4 ambientLight; // 16 bytes
+    float4 ambientLightCol; // 16 bytes
+    float4 directionalLightDir; // 16 bytes
+    float4 directionalLightCol; // 16 bytes
+    //PointLight pointLights[MAX_POINT_LIGHTS]; // 384 bytes
 }
 
 VOut main(VIn input)
 {
+    //VOut output;
+    //output.position = mul(WVP, float4(input.position, 1));
+    //output.colour = float4(ambientLight.xyz * ambientLight.z, 1);
+    //output.uv = input.uv;
+    //return output;
+    
     VOut output;
+    
+    // Position
     output.position = mul(WVP, float4(input.position, 1));
-    output.colour = float4(ambientLight.xyz * ambientLight.z, 1);
+    // Texture coords
     output.uv = input.uv;
+    
+    // Lighting
+    float diffuseAmount = dot(directionalLightDir.xyz, input.normal);
+    diffuseAmount = saturate(diffuseAmount);
+    float3 directionalFinal = directionalLightCol * diffuseAmount;
+    
+    // --Point lighting
+    //float3 pointFinal = float3(0, 0, 0);
+    //for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
+    //{
+    //    if (!pointLights[i].enabled)
+    //        continue;
+        
+    //    float4 pointLightDir = normalize(pointLights[i].position - input.position);
+    //    float pointLightDistance = length(pointLights[i].position - input.position);
+    //    float pointLightAttenuation = pointLights[i].strength / (pointLightDistance * pointLightDistance + pointLights[i].strength);
+    //    float pointAmount = dot(pointLightDir.xyz, input.norm) * pointLightAttenuation;
+    //    pointAmount = saturate(pointAmount);
+    //    pointFinal += pointLights[i].colour * pointAmount;
+    //}
+    
+    // Final colour
+    output.colour = saturate(ambientLightCol + float4(directionalFinal, 1)); //+float4(pointFinal, 1));
+    
     return output;
 }

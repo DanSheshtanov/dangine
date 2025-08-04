@@ -23,7 +23,7 @@ Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string objPath)
     // Create the vertex buffer
     D3D11_BUFFER_DESC bd = { 0 };
     bd.Usage = D3D11_USAGE_DYNAMIC; // Dynamic allows CPU-write and GPU-read
-    bd.ByteWidth = (int)ml.GetVertexBufferSize(); // Size of buffer - sizeof vertex * num of vertices
+    bd.ByteWidth = (unsigned int)ml.GetVertexBufferSize(); // Size of buffer - sizeof vertex * num of vertices
     //bd.ByteWidth = sizeof(vertices); // Alternatively can also be this for simplicty
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER; // Use as vertex buffer
     bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // Allow CPU to write in buffer
