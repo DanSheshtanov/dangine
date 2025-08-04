@@ -1,8 +1,6 @@
 #include "Common.hlsli"
 #include "Lighting.hlsli"
 
-#define MAX_POINT_LIGHTS 8
-
 //struct PointLight
 //{
 //    float4 position; // 16 bytes
@@ -25,7 +23,7 @@ cbuffer LightingData
 {
     float4 ambientLightCol; // 16 bytes
     DirectionalLight dirLight;
-    //PointLight pointLights[MAX_POINT_LIGHTS]; // 384 bytes
+    PointLight pointLights[MAX_POINT_LIGHTS]; // 384 bytes
 }
 
 VOut main(VIn input)
@@ -60,7 +58,7 @@ VOut main(VIn input)
     
     // Final colour
     //output.colour = saturate(ambientLightCol + float4(directionalFinal, 1)); //+float4(pointFinal, 1));
-    output.colour = float4(CalculateAllLighting(ambientLightCol.xyz, dirLight, input.normal), 1);
+    output.colour = float4(CalculateAllLighting(ambientLightCol.xyz, dirLight, pointLights, float4(input.position, 1), input.normal), 1);
     
     return output;
 }

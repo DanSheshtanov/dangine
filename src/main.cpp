@@ -37,11 +37,14 @@ int WINAPI WinMain(
 
     // Assets
     Texture* texture1 = new Texture{ rend.GetDevice(), rend.GetDeviceCon(), "assets/textures/colormap.png" };
+    Texture* texture2 = new Texture{ rend.GetDevice(), rend.GetDeviceCon(), "assets/textures/white.png" };
     Material* mat_standard = new Material{ "m_standard", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
     Material_Lit* mat_lit = new Material_Lit{ "m_lit", rend.GetDevice(), "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Material_Lit* mat_lit_white = new Material_Lit{ "m_lit", rend.GetDevice(), "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture2 };
     Material_Waves* mat_waves = new Material_Waves{ "m_waves", rend.GetDevice(),"Compiled Shaders/VShaderWaves.cso", "Compiled Shaders/PixelShader.cso", texture1 };
     Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/sub.obj"};
     Mesh* mesh2 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/cube.obj"};
+    Mesh* mesh3 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/pizza.obj"};
 
     // Scene
     Camera cam;
@@ -53,11 +56,16 @@ int WINAPI WinMain(
 
     Entity e2{ "Cube", &mesh2, &mat_standard};
     rend.RegisterEntity(&e2);
-    e2.transform.Translate({ 3, 1, 0.5f });
+    e2.transform.Translate({ 3, 0, 0.5f });
 
-    Entity e3{ "Cube", &mesh2, (Material**)&mat_lit};
+    Entity e3{ "Cube", &mesh2, (Material**)&mat_lit_white};
     rend.RegisterEntity(&e3);
-    e3.transform.Translate({ -3, 1, 0.5f });
+    e3.transform.Translate({ -3, 0, 0.5f });
+
+    Entity e4{ "Pizza", &mesh3, (Material**)&mat_lit };
+    rend.RegisterEntity(&e4);
+    e4.transform.Translate({ 0, -2.5f, 0 });
+    e4.transform.scale = XMVectorSet(10, 10, 10, 1);
 
     // Used to hold windows event messages
     MSG msg;

@@ -3,6 +3,8 @@
 
 #include <DirectXMath.h>
 
+#define MAX_POINT_LIGHTS 8
+
 class Material_Lit : public Material
 {
 public:
@@ -11,10 +13,19 @@ public:
         DirectX::XMVECTOR transposedDirection;
         DirectX::XMVECTOR colour;
     };
+    struct PointLight
+    {
+        DirectX::XMVECTOR position; // 16 bytes
+        DirectX::XMVECTOR colour; // 16 bytes
+        float strength = 1; // 4 bytes
+        unsigned int enabled = 0; // 4 bytes
+        DirectX::XMFLOAT2 padding; // 8 bytes
+    };
     struct CBufferLighting : CBufferBase
     {
         DirectX::XMVECTOR ambientLight{ 1,1,1,1 };
         DirectionalLight directionalLight;
+        PointLight pointLights[MAX_POINT_LIGHTS];
     };
 
 	Material_Lit(std::string name, ID3D11Device* dev,
