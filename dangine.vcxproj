@@ -35,6 +35,7 @@
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Lighting.h" />
     <ClInclude Include="src\materials\Material_Lit.h" />
     <ClInclude Include="src\materials\Material_Waves.h" />
     <ClInclude Include="src\ModelLoader.h" />

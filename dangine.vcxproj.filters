@@ -104,6 +104,9 @@
     <ClInclude Include="src\materials\Material_Lit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Lighting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

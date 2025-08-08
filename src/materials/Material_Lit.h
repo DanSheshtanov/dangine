@@ -1,19 +1,24 @@
 #pragma once
 #include "Material.h"
+#include "Lighting.h"
 
-#include <DirectXMath.h>
-
-#define MAX_POINT_LIGHTS 8
 
 class Material_Lit : public Material
 {
 public:
-    struct DirectionalLight
+	Material_Lit(std::string name, Renderer& renderer,
+		std::string vShaderFilename, std::string pShaderFilename,
+		Texture* texture);
+
+    virtual void UpdateMaterial(Entity * entity) override;
+
+protected:
+    struct DirectionalLightCB
     {
         DirectX::XMVECTOR transposedDirection;
         DirectX::XMVECTOR colour;
     };
-    struct PointLight
+    struct PointLightCB
     {
         DirectX::XMVECTOR position; // 16 bytes
         DirectX::XMVECTOR colour; // 16 bytes
@@ -24,14 +29,8 @@ public:
     struct CBufferLighting : CBufferBase
     {
         DirectX::XMVECTOR ambientLight{ 1,1,1,1 };
-        DirectionalLight directionalLight;
-        PointLight pointLights[MAX_POINT_LIGHTS];
+        DirectionalLightCB directionalLight;
+        PointLightCB pointLights[MAX_POINT_LIGHTS];
     };
-
-	Material_Lit(std::string name, Renderer& renderer,
-		std::string vShaderFilename, std::string pShaderFilename,
-		Texture* texture);
-
-    virtual void UpdateMaterial(Entity * entity) override;
 };
 

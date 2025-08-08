@@ -67,6 +67,10 @@ int WINAPI WinMain(
     e4.transform.Translate({ 0, -2.5f, 0 });
     e4.transform.scale = XMVectorSet(10, 10, 10, 1);
 
+    rend.GetPointLights()[0].enabled = true;
+    rend.GetPointLights()[0].colour = { 0, 1, 1, 1 };
+    rend.GetPointLights()[0].position = { 0, 0, 0, 1 };
+
     // Used to hold windows event messages
     MSG msg;
 
@@ -92,6 +96,8 @@ int WINAPI WinMain(
             e2.transform.Rotate(XMVectorScale(rotation, 2.5f));
             e3.transform.Rotate(XMVectorScale(-rotation, 2.5f));
             
+            rend.GetPointLights()[0].position = XMVectorSetX(rend.GetPointLights()[0].position, sin(Time::GetElapsedTime() * 5));
+
             auto kbState = Keyboard::Get().GetState();
             auto msState = Mouse::Get().GetState();
             if (kbState.W)

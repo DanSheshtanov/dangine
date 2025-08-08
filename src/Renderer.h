@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 
+#include "Lighting.h"
+
 class Window;
 
 struct IDXGISwapChain;
@@ -22,6 +24,14 @@ public:
 	ID3D11Device* GetDevice() { return dev; }
 	ID3D11DeviceContext* GetDeviceCon() { return devcon; }
 
+	/// <summary>
+	/// Get point lights array of size MAX_POINT_LIGHTS macro.
+	/// </summary>
+	/// <returns>Pointer to an array of point lights.</returns>
+	PointLight* GetPointLights() { return pointLights; }
+	DirectionalLight& GetDirectionalLight() { return dirLight; }
+	DirectX::XMVECTOR GetAmbientLight() { return ambientLight; }
+
 	void RegisterEntity(Entity* e);
 	void DestroyEntity(Entity* e);
 
@@ -34,11 +44,13 @@ private:
 	ID3D11RenderTargetView* backbuffer = NULL; // a view to access our back buffer
 	ID3D11DepthStencilView* depthBuffer = NULL; // the pointer to our depth buffer
 
-
 	ID3D11Buffer* cbufferPerFrame = NULL;
 	ID3D11Buffer* cbufferPerObject = NULL;
 
 	std::vector<Entity*> drawnEntities;
+	DirectX::XMVECTOR ambientLight{ 0.2f, 0.2f, 0.2f, 1 };
+	DirectionalLight dirLight;
+	PointLight pointLights[MAX_POINT_LIGHTS];
 
 	int InitD3D();
 	int InitDepthBuffer();

@@ -17,7 +17,7 @@ struct PointLight
 
 float3 CalculateDirectionalContribution(DirectionalLight light, float3 vNormal)
 {
-    float diffuseAmount = dot(light.transposedDirection.xyz, vNormal);
+    float diffuseAmount = dot(normalize(light.transposedDirection.xyz), vNormal);
     diffuseAmount = saturate(diffuseAmount);
     return light.colour * diffuseAmount;
 }
