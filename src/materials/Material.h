@@ -8,13 +8,14 @@ struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct ID3D11Buffer;
 
+class Renderer;
 class Texture;
 class Entity;
 
 class Material
 {
 public:
-	Material(std::string name, ID3D11Device* dev,
+	Material(std::string name, Renderer& renderer,
 		std::string vShaderFilename, std::string pShaderFilename,
 		Texture* texture);
 
@@ -30,6 +31,7 @@ protected:
 
 	std::string name;
 
+	Renderer& renderer;
 	ID3D11Device* dev			= nullptr;
 	ID3D11VertexShader* vShader	= nullptr;
 	ID3D11InputLayout* vLayout	= nullptr;

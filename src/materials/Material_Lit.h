@@ -28,7 +28,7 @@ public:
         PointLight pointLights[MAX_POINT_LIGHTS];
     };
 
-	Material_Lit(std::string name, ID3D11Device* dev,
+	Material_Lit(std::string name, Renderer& renderer,
 		std::string vShaderFilename, std::string pShaderFilename,
 		Texture* texture);
 

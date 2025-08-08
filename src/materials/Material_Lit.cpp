@@ -7,9 +7,9 @@
 
 Material_Lit::PointLight pointLights[MAX_POINT_LIGHTS];
 
-Material_Lit::Material_Lit(std::string name, ID3D11Device* dev,
+Material_Lit::Material_Lit(std::string name, Renderer& renderer,
 	std::string vShaderFilename, std::string pShaderFilename, Texture* texture)
-	: Material(name, dev, vShaderFilename, pShaderFilename, texture)
+	: Material(name, renderer, vShaderFilename, pShaderFilename, texture)
 {
 	CreateCBuffer(sizeof(CBufferLighting));
 

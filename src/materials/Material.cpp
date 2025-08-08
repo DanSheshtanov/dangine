@@ -2,14 +2,15 @@
 
 #include <d3d11.h>
 
+#include "Renderer.h"
 #include "Texture.h"
 #include "ShaderLoading.h"
 #include "Debug.h"
 
-Material::Material(std::string name, ID3D11Device* dev,
+Material::Material(std::string name, Renderer& renderer,
 	std::string vShaderFilename, std::string pShaderFilename,
 	Texture* texture = nullptr)
-	:name(name), dev(dev), texture(texture)
+	:name(name), renderer(renderer), dev(renderer.GetDevice()), texture(texture)
 {
 	HRESULT hr;
 	hr = ShaderLoading::LoadVertexShader(vShaderFilename, dev, &vShader, &vLayout);

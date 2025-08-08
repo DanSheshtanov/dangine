@@ -5,11 +5,12 @@ struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct ID3D11Buffer;
 
+class Renderer;
+
 class Mesh
 {
 public:
-	Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon);
-	Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string objPath);
+	Mesh(Renderer& renderer, std::string objPath);
 	void Render();
 
 private:

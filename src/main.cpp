@@ -8,10 +8,10 @@
 #include "materials/Material_Lit.h"
 #include "materials/Material_Waves.h"
 #include "Mesh.h"
-#include "Camera.h"
-#include "Entity.h"
 #include "ModelLoader.h"
 #include "Texture.h"
+#include "Camera.h"
+#include "Entity.h"
 
 
 // Program entry point
@@ -36,15 +36,15 @@ int WINAPI WinMain(
     }
 
     // Assets
-    Texture* texture1 = new Texture{ rend.GetDevice(), rend.GetDeviceCon(), "assets/textures/colormap.png" };
-    Texture* texture2 = new Texture{ rend.GetDevice(), rend.GetDeviceCon(), "assets/textures/white.png" };
-    Material* mat_standard = new Material{ "m_standard", rend.GetDevice(), "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
-    Material_Lit* mat_lit = new Material_Lit{ "m_lit", rend.GetDevice(), "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture1 };
-    Material_Lit* mat_lit_white = new Material_Lit{ "m_lit", rend.GetDevice(), "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture2 };
-    Material_Waves* mat_waves = new Material_Waves{ "m_waves", rend.GetDevice(),"Compiled Shaders/VShaderWaves.cso", "Compiled Shaders/PixelShader.cso", texture1 };
-    Mesh* mesh1 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/sub.obj"};
-    Mesh* mesh2 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/cube.obj"};
-    Mesh* mesh3 = new Mesh{ rend.GetDevice(), rend.GetDeviceCon(), "assets/models/pizza.obj"};
+    Texture* texture1 = new Texture{ rend, "assets/textures/colormap.png" };
+    Texture* texture2 = new Texture{ rend, "assets/textures/white.png" };
+    Material* mat_standard = new Material{ "m_standard", rend, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Material_Lit* mat_lit = new Material_Lit{ "m_lit", rend, "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Material_Lit* mat_lit_white = new Material_Lit{ "m_lit", rend, "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture2 };
+    Material_Waves* mat_waves = new Material_Waves{ "m_waves", rend,"Compiled Shaders/VShaderWaves.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Mesh* mesh1 = new Mesh{ rend, "assets/models/sub.obj"};
+    Mesh* mesh2 = new Mesh{ rend, "assets/models/cube.obj"};
+    Mesh* mesh3 = new Mesh{ rend, "assets/models/pizza.obj"};
 
     // Scene
     Camera cam;

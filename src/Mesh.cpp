@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include <DirectXColors.h>
 
+#include "Renderer.h"
 #include "ModelLoader.h"
 #include "Debug.h"
 
@@ -15,8 +16,8 @@ struct Vertex
     XMFLOAT4 Color;
 };
 
-Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string objPath)
-    : dev(dev), devcon(devcon)
+Mesh::Mesh(Renderer& renderer, std::string objPath)
+    : dev(renderer.GetDevice()), devcon(renderer.GetDeviceCon())
 {
     ModelLoader ml{ objPath };
 
@@ -57,28 +58,6 @@ Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string objPath)
         LOG("Failed to create index buffer.");
         return;
     }
-}
-
-Mesh::Mesh(ID3D11Device* dev, ID3D11DeviceContext* devcon)
-{
-    //Vertex vertices[] =
-    //{
-    //    { XMFLOAT3{-0.5f, -0.5f, 0.0f}, XMFLOAT4{Colors::Red} },
-    //    { XMFLOAT3{ 0.0f,  0.5f, 0.0f}, XMFLOAT4{Colors::Lime}},
-    //    { XMFLOAT3{ 0.5f, -0.5f, 0.0f}, XMFLOAT4{Colors::Blue}},
-    //};
-
-    /*Vertex vertices[] =
-    {
-        { ml.temp_vertices[0], XMFLOAT4{Colors::Red} },
-        { ml.temp_vertices[1], XMFLOAT4{Colors::Lime} },
-        { ml.temp_vertices[2], XMFLOAT4{Colors::Blue} },
-        { ml.temp_vertices[3], XMFLOAT4{Colors::Red} },
-        { ml.temp_vertices[4], XMFLOAT4{Colors::Lime} },
-        { ml.temp_vertices[5], XMFLOAT4{Colors::Red} },
-        { ml.temp_vertices[6], XMFLOAT4{Colors::Blue} },
-        { ml.temp_vertices[7], XMFLOAT4{Colors::Red} },
-    };*/
 }
 
 void Mesh::Render()

@@ -12,7 +12,7 @@ public:
         DirectX::XMFLOAT3 padding;
     };
 
-    Material_Waves(std::string name, ID3D11Device* dev,
+    Material_Waves(std::string name, Renderer& renderer,
         std::string vShaderFilename, std::string pShaderFilename,
         Texture* texture);
 

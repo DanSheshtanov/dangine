@@ -3,9 +3,13 @@
 #include <WICTextureLoader.h>
 #include <d3d11.h>
 
+#include "Renderer.h"
 
-Texture::Texture(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string path)
+
+Texture::Texture(Renderer& renderer, std::string path)
 {
+    ID3D11Device* dev = renderer.GetDevice();
+    ID3D11DeviceContext* devcon = renderer.GetDeviceCon();
     DirectX::CreateWICTextureFromFile(dev, devcon, std::wstring(path.begin(), path.end()).c_str(), NULL, &texture);
     
     D3D11_SAMPLER_DESC samplerDesc;

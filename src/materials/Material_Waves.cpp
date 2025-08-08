@@ -2,9 +2,9 @@
 
 #include <d3d11.h>
 
-Material_Waves::Material_Waves(std::string name, ID3D11Device* dev,
+Material_Waves::Material_Waves(std::string name, Renderer& renderer,
 	std::string vShaderFilename, std::string pShaderFilename, Texture* texture)
-	: Material(name, dev, vShaderFilename, pShaderFilename, texture)
+	: Material(name, renderer, vShaderFilename, pShaderFilename, texture)
 {
 	CreateCBuffer(sizeof(CBufferWaves));
 }
