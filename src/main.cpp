@@ -7,6 +7,7 @@
 #include "materials/Material.h"
 #include "materials/Material_Lit.h"
 #include "materials/Material_Waves.h"
+#include "materials/Material_Skybox.h"
 #include "Mesh.h"
 #include "ModelLoader.h"
 #include "Texture.h"
@@ -38,13 +39,16 @@ int WINAPI WinMain(
     // Assets
     Texture* texture1 = new Texture{ rend, "assets/textures/colormap.png" };
     Texture* texture2 = new Texture{ rend, "assets/textures/white.png" };
+    Texture* textureSkybox = new Texture{ rend, "assets/textures/skybox/skybox01.dds", Texture::TextureType::Cubemap };
     Material* mat_standard = new Material{ "m_standard", rend, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
     Material_Lit* mat_lit = new Material_Lit{ "m_lit", rend, "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture1 };
     Material_Lit* mat_lit_white = new Material_Lit{ "m_lit", rend, "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture2 };
     Material_Waves* mat_waves = new Material_Waves{ "m_waves", rend,"Compiled Shaders/VShaderWaves.cso", "Compiled Shaders/PixelShader.cso", texture1 };
+    Material_Skybox* mat_skybox = new Material_Skybox{ "m_skybox", rend, "Compiled Shaders/SkyboxVS.cso", "Compiled Shaders/SkyboxPS.cso", textureSkybox };
     Mesh* mesh1 = new Mesh{ rend, "assets/models/sub.obj"};
     Mesh* mesh2 = new Mesh{ rend, "assets/models/cube.obj"};
     Mesh* mesh3 = new Mesh{ rend, "assets/models/pizza.obj"};
+    Mesh* mesh4 = new Mesh{ rend, "assets/models/sphere.obj"};
 
     // Scene
     Camera cam;
@@ -54,7 +58,8 @@ int WINAPI WinMain(
     e1.transform.scale = XMVectorSet(10, 10, 10, 1);
     rend.RegisterEntity(&e1);
 
-    Entity e2{ "Cube", &mesh2, &mat_standard};
+    Entity e2{ "Cube", &mesh4,(Material**)&mat_skybox};
+    //Entity e2{ "Cube", &mesh2, &mat_standard};
     rend.RegisterEntity(&e2);
     e2.transform.Translate({ 3, 0, 0.5f });
 

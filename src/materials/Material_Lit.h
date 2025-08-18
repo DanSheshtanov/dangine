@@ -33,4 +33,3 @@ protected:
         PointLightCB pointLights[MAX_POINT_LIGHTS];
     };
 };
-

@@ -10,7 +10,13 @@ struct ID3D11SamplerState;
 class Texture
 {
 public:
-	Texture(Renderer& renderer, std::string path);
+	enum class TextureType
+	{
+		Texture2D,
+		Cubemap
+	};
+
+	Texture(Renderer& renderer, std::string path, TextureType type = TextureType::Texture2D);
 	ID3D11ShaderResourceView* GetTexture() { return texture; }
 	ID3D11SamplerState* GetSampler() { return sampler; }
 

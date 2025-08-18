@@ -1,16 +1,29 @@
 #include "Texture.h"
 
 #include <WICTextureLoader.h>
+#include <DDSTextureLoader.h>
 #include <d3d11.h>
 
 #include "Renderer.h"
 
 
-Texture::Texture(Renderer& renderer, std::string path)
+Texture::Texture(Renderer& renderer, std::string path, TextureType type)
 {
     ID3D11Device* dev = renderer.GetDevice();
     ID3D11DeviceContext* devcon = renderer.GetDeviceCon();
-    DirectX::CreateWICTextureFromFile(dev, devcon, std::wstring(path.begin(), path.end()).c_str(), NULL, &texture);
+
+    std::wstring filepath = std::wstring(path.begin(), path.end());
+    switch (type)
+    {
+    case Texture::TextureType::Texture2D:
+        DirectX::CreateWICTextureFromFile(dev, devcon, filepath.c_str(), NULL, &texture);
+        break;
+    case Texture::TextureType::Cubemap:
+        DirectX::CreateDDSTextureFromFile(dev, devcon, filepath.c_str(), NULL, &texture);
+        break;
+    default:
+        break;
+    }
     
     D3D11_SAMPLER_DESC samplerDesc;
     ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));

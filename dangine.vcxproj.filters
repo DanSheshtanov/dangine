@@ -57,6 +57,9 @@
     <ClCompile Include="src\materials\Material_Lit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\materials\Material_Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debug.h">
@@ -107,6 +110,9 @@
     <ClInclude Include="src\Lighting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\materials\Material_Skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -119,5 +125,7 @@
     <FxCompile Include="src\shaders\VertexShader.hlsl" />
     <FxCompile Include="src\shaders\VShaderLit.hlsl" />
     <FxCompile Include="src\shaders\VShaderWaves.hlsl" />
+    <FxCompile Include="src\shaders\SkyboxVS.hlsl" />
+    <FxCompile Include="src\shaders\SkyboxPS.hlsl" />
   </ItemGroup>
 </Project>
