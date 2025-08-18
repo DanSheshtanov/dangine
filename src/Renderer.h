@@ -11,6 +11,8 @@ struct ID3D11DeviceContext;
 struct ID3D11RenderTargetView;
 struct ID3D11Buffer;
 struct ID3D11DepthStencilView;
+struct ID3D11DepthStencilState;
+struct ID3D11RasterizerState;
 
 class Camera;
 class Entity;
@@ -35,6 +37,8 @@ public:
 	void RegisterEntity(Entity* e);
 	void DestroyEntity(Entity* e);
 
+	void SetSkybox(Entity* e);
+
 private:
 	Window* window;
 
@@ -44,16 +48,23 @@ private:
 	ID3D11RenderTargetView* backbuffer = NULL; // a view to access our back buffer
 	ID3D11DepthStencilView* depthBuffer = NULL; // the pointer to our depth buffer
 
+	ID3D11RasterizerState* rasterSolid = NULL;
+	ID3D11RasterizerState* rasterSkybox = NULL;
+	ID3D11DepthStencilState* depthWriteSolid = NULL;
+	ID3D11DepthStencilState* depthWriteSkybox = NULL;
+
 	ID3D11Buffer* cbufferPerFrame = NULL;
 	ID3D11Buffer* cbufferPerObject = NULL;
 
 	std::vector<Entity*> drawnEntities;
+	Entity* skybox = nullptr;
 	DirectX::XMVECTOR ambientLight{ 0.2f, 0.2f, 0.2f, 1 };
 	DirectionalLight dirLight;
 	PointLight pointLights[MAX_POINT_LIGHTS];
 
 	int InitD3D();
 	int InitDepthBuffer();
+	void DrawSkybox(Camera& cam);
 	void CleanD3D();
 };
 

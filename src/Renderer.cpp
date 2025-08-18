@@ -70,6 +70,27 @@ int Renderer::Init(Window* wnd)
         return -1;
     }
 
+    // Rasteriser and depth stencil for skybox
+    // Back-face culling
+    D3D11_RASTERIZER_DESC rsDesc;
+    ZeroMemory(&rsDesc, sizeof(D3D11_RASTERIZER_DESC));
+    rsDesc.CullMode = D3D11_CULL_BACK;
+    rsDesc.FillMode = D3D11_FILL_SOLID;
+    dev->CreateRasterizerState(&rsDesc, &rasterSolid);
+    // Front-face culling
+    rsDesc.CullMode = D3D11_CULL_FRONT;
+    dev->CreateRasterizerState(&rsDesc, &rasterSkybox);
+
+    // Depth writing enabled
+    D3D11_DEPTH_STENCIL_DESC dsDesc = { 0 };
+    dsDesc.DepthEnable = true;
+    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+    dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+    dev->CreateDepthStencilState(&dsDesc, &depthWriteSolid);
+    // Depth writing disabled
+    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+    dev->CreateDepthStencilState(&dsDesc, &depthWriteSkybox);
+
     return S_OK;
 }
 
@@ -93,6 +114,8 @@ void Renderer::RenderFrame(Camera& cam)
     cbufferPerFrameValues.time = Time::GetElapsedTime();
     devcon->UpdateSubresource(cbufferPerFrame, 0, 0, &cbufferPerFrameValues, 0, 0);
     devcon->VSSetConstantBuffers(cbufferPerFrameIndex, 1, &cbufferPerFrame);
+
+    DrawSkybox(cam);
 
     CBuffer_PerObject cBuf1_values;
 
@@ -125,6 +148,11 @@ void Renderer::DestroyEntity(Entity* e)
         drawnEntities.erase(foundEntity);
     }
     // Note: will affect index-based iterating
+}
+
+void Renderer::SetSkybox(Entity* e)
+{
+    skybox = e;
 }
 
 int Renderer::InitD3D()
@@ -231,6 +259,53 @@ int Renderer::InitDepthBuffer()
     zBufferTexture->Release();
 
     return S_OK;
+}
+
+void Renderer::DrawSkybox(Camera& cam)
+{
+    // Early return if skybox is not set
+    if (skybox == nullptr)
+        return;
+
+    // Front-face culling and disable depth write
+    devcon->OMSetDepthStencilState(depthWriteSkybox, 1);
+    devcon->RSSetState(rasterSkybox);
+
+    //// Set skybox shaders
+    //devcon->VSSetShader(pVSSkybox, 0, 0);
+    //devcon->PSSetShader(pPSSkybox, 0, 0);
+    //devcon->IASetInputLayout(pLayoutSkybox);
+
+    // Constant buffer data (manually rolling this for skybox. Usually handled in RenderFrame)
+    CBuffer_PerObject cbuf;
+    XMMATRIX translation, projection, view;
+    XMVECTOR camPos = cam.transform.position;
+    translation = XMMatrixTranslation(XMVectorGetX(camPos), XMVectorGetY(camPos), XMVectorGetZ(camPos));
+    projection = cam.GetProjectionMatrix(window->GetWidth(), window->GetHeight());
+    view = cam.GetViewMatrix();
+    cbuf.WVP = translation * view * projection;
+    devcon->UpdateSubresource(cbufferPerObject, 0, 0, &cbuf, 0, 0);
+
+    // Move skybox to camera position, prepare draw call and render
+    (*skybox->material)->UpdateMaterial(skybox);
+    (*skybox->material)->Bind();
+    (*skybox->mesh)->Render();
+
+    // Set shader resources
+    /*devcon->VSSetConstantBuffers(0, 1, &pSkyboxCBuffer);
+    devcon->PSSetSamplers(0, 1, &pSampler);
+    devcon->PSSetShaderResources(0, 1, &pSkyboxTexture);*/
+
+    //model->Draw();
+
+    // Back-face culling and enable depth write
+    devcon->OMSetDepthStencilState(depthWriteSolid, 1);
+    devcon->RSSetState(rasterSolid);
+
+    // Set standard shaders
+    //devcon->VSSetShader(pVS, 0, 0);
+    //devcon->PSSetShader(pPS, 0, 0);
+    //devcon->IASetInputLayout(pLayout);
 }
 
 void Renderer::CleanD3D()

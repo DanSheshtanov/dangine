@@ -54,6 +54,9 @@ int WINAPI WinMain(
     Camera cam;
     cam.transform.position = XMVectorSetZ(cam.transform.position, -8);
 
+    Entity skybox{ "Skybox", &mesh2, (Material**)&mat_skybox };
+    rend.SetSkybox(&skybox);
+
     Entity e1{ "Sub", &mesh1, (Material**)&mat_waves};
     e1.transform.scale = XMVectorSet(10, 10, 10, 1);
     rend.RegisterEntity(&e1);
