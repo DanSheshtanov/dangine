@@ -18,11 +18,14 @@ const UINT cbufferPerObjectIndex = 12;
 struct CBuffer_PerFrame
 {
     FLOAT time;     // 4 bytes
-    XMFLOAT3 packing;
+    XMFLOAT3 cameraPos;
+    //XMFLOAT3 packing;
 };
 
 struct CBuffer_PerObject
 {
+    XMMATRIX World;
+    XMMATRIX WorldView;
     XMMATRIX WVP;   // 64 bytes (4x4 = 16 floats. 16x4 bytes each = 64 bytes total)
 };
 
@@ -112,6 +115,7 @@ void Renderer::RenderFrame(Camera& cam)
     // Per frame CBuffer
     CBuffer_PerFrame cbufferPerFrameValues;
     cbufferPerFrameValues.time = Time::GetElapsedTime();
+    XMStoreFloat3(&cbufferPerFrameValues.cameraPos, cam.transform.position);
     devcon->UpdateSubresource(cbufferPerFrame, 0, 0, &cbufferPerFrameValues, 0, 0);
     devcon->VSSetConstantBuffers(cbufferPerFrameIndex, 1, &cbufferPerFrame);
 
@@ -121,6 +125,8 @@ void Renderer::RenderFrame(Camera& cam)
 
     for (auto entity : drawnEntities)
     {
+        cBuf1_values.World = entity->transform.GetWorldMatrix();
+        cBuf1_values.WorldView = entity->transform.GetWorldMatrix() * view;
         cBuf1_values.WVP = entity->transform.GetWorldMatrix() * view * proj;
         devcon->UpdateSubresource(cbufferPerObject, 0, 0, &cBuf1_values, 0, 0);
         devcon->VSSetConstantBuffers(cbufferPerObjectIndex, 1, &cbufferPerObject);

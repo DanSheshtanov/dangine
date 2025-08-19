@@ -127,5 +127,6 @@
     <FxCompile Include="src\shaders\VShaderWaves.hlsl" />
     <FxCompile Include="src\shaders\SkyboxVS.hlsl" />
     <FxCompile Include="src\shaders\SkyboxPS.hlsl" />
+    <FxCompile Include="src\shaders\ReflectivePS.hlsl" />
   </ItemGroup>
 </Project>

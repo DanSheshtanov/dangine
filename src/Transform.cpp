@@ -1,5 +1,7 @@
 #include "Transform.h"
 
+using namespace DirectX;
+
 void Transform::Translate(XMVECTOR translation)
 {
     position = XMVectorAdd(position, translation);

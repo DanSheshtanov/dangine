@@ -6,13 +6,20 @@
 class Material_Lit : public Material
 {
 public:
+    float reflectiveness = 0.1f;
+
 	Material_Lit(std::string name, Renderer& renderer,
 		std::string vShaderFilename, std::string pShaderFilename,
 		Texture* texture);
 
     virtual void UpdateMaterial(Entity * entity) override;
 
+    void SetReflectionTexture(Texture* reflectionTexture) { skyboxTexture = reflectionTexture; }
+
 protected:
+    Texture* skyboxTexture = nullptr;
+    ID3D11Buffer* cbufferPixelShader = nullptr;
+
     struct DirectionalLightCB
     {
         DirectX::XMVECTOR transposedDirection;
@@ -31,5 +38,11 @@ protected:
         DirectX::XMVECTOR ambientLight{ 1,1,1,1 };
         DirectionalLightCB directionalLight;
         PointLightCB pointLights[MAX_POINT_LIGHTS];
+    };
+
+    struct CBufferPS : CBufferBase
+    {
+        float reflectiveness;
+        DirectX::XMFLOAT3 padding;
     };
 };

@@ -2,7 +2,6 @@
 
 #include "Transform.h"
 
-using namespace DirectX;
 
 class Camera
 {

@@ -54,11 +54,16 @@ void Material::Bind()
 
 void Material::CreateCBuffer(unsigned int byteWidth)
 {
+	CreateCBuffer(byteWidth, cbuffer);
+}
+
+void Material::CreateCBuffer(unsigned int byteWidth, ID3D11Buffer*& targetBuffer)
+{
 	D3D11_BUFFER_DESC cbd{ 0 };
 	cbd.Usage = D3D11_USAGE_DEFAULT;
 	cbd.ByteWidth = byteWidth;
 	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	if (FAILED(dev->CreateBuffer(&cbd, NULL, &cbuffer)))
+	if (FAILED(dev->CreateBuffer(&cbd, NULL, &targetBuffer)))
 	{
 		LOG("Oops, failed to create CBuffer for material " + name);
 	}
@@ -66,8 +71,13 @@ void Material::CreateCBuffer(unsigned int byteWidth)
 
 void Material::UpdateCBuffer(CBufferBase& cbData)
 {
+	UpdateCBuffer(cbData, cbuffer);
+}
+
+void Material::UpdateCBuffer(CBufferBase& cbData, ID3D11Buffer*& targetCbuffer)
+{
 	ID3D11DeviceContext* devcon;
 	dev->GetImmediateContext(&devcon);
 
-	devcon->UpdateSubresource(cbuffer, 0, 0, &cbData, 0, 0);
+	devcon->UpdateSubresource(targetCbuffer, 0, 0, &cbData, 0, 0);
 }

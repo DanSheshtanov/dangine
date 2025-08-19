@@ -8,16 +8,16 @@ class Transform
 {
 public:
 	
-	XMVECTOR position{ 0,0,0,1 };
-	XMVECTOR eulerRotation{ 0,0,0,1 };
-	XMVECTOR scale{ 1,1,1,1 };
+	DirectX::XMVECTOR position{ 0,0,0,1 };
+	DirectX::XMVECTOR eulerRotation{ 0,0,0,1 };
+	DirectX::XMVECTOR scale{ 1,1,1,1 };
 
-	void Translate(XMVECTOR translation);
-	void Rotate(XMVECTOR rotation);
+	void Translate(DirectX::XMVECTOR translation);
+	void Rotate(DirectX::XMVECTOR rotation);
 
-	XMVECTOR GetForward();
-	XMVECTOR GetRight();
-	XMVECTOR GetUp();
-	XMMATRIX GetWorldMatrix();
+	DirectX::XMVECTOR GetForward();
+	DirectX::XMVECTOR GetRight();
+	DirectX::XMVECTOR GetUp();
+	DirectX::XMMATRIX GetWorldMatrix();
 };
 

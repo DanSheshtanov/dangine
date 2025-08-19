@@ -42,6 +42,8 @@ protected:
 	ID3D11Buffer* cbuffer = nullptr;
 
 	void CreateCBuffer(unsigned int byteWidth);
+	void CreateCBuffer(unsigned int byteWidth, ID3D11Buffer*& targetBuffer);
 	void UpdateCBuffer(CBufferBase& cbData);
+	void UpdateCBuffer(CBufferBase& cbData, ID3D11Buffer*& targetBuffer);
 };
 

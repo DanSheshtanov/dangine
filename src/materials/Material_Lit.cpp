@@ -5,18 +5,23 @@
 #include "Debug.h"
 #include "Entity.h"
 #include "Renderer.h"
+#include "Texture.h"
 
 Material_Lit::Material_Lit(std::string name, Renderer& renderer,
 	std::string vShaderFilename, std::string pShaderFilename, Texture* texture)
 	: Material(name, renderer, vShaderFilename, pShaderFilename, texture)
 {
 	CreateCBuffer(sizeof(CBufferLighting));
+	CreateCBuffer(sizeof(CBufferLighting), cbufferPixelShader);
 ;}
 
 void Material_Lit::UpdateMaterial(Entity* entity)
 {
 	using namespace DirectX;
 	Material::UpdateMaterial(entity);
+
+	ID3D11DeviceContext* devcon;
+	dev->GetImmediateContext(&devcon);
 
 	CBufferLighting cbData;
 	// Ambient light
@@ -44,6 +49,19 @@ void Material_Lit::UpdateMaterial(Entity* entity)
 		cbData.pointLights[i].strength = pointLights[i].strength;
 	}
 
+	// Skybox reflection
+	if (skyboxTexture != nullptr)
+	{
+		ID3D11ShaderResourceView* t = skyboxTexture->GetTexture();
+		devcon->PSSetShaderResources(1, 1, &t);
+	}
+
 	UpdateCBuffer(cbData);
+
+	// Pixel shdader
+	CBufferPS cbpsData;
+	cbpsData.reflectiveness = reflectiveness;
+	UpdateCBuffer(cbpsData, cbufferPixelShader);
+	devcon->PSSetConstantBuffers(0, 1, &cbufferPixelShader); // Stinky here
 }
 

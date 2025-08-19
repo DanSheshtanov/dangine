@@ -16,7 +16,8 @@ struct VOut
 {
     float4 position : SV_Position;
     float4 colour : COLOR;
-    float2 uv : TEXCOORD;
+    float2 uv : TEXCOORD0;
+    float3 uvw : TEXCOORD1;
 };
 
 cbuffer LightingData
@@ -59,6 +60,8 @@ VOut main(VIn input)
     // Final colour
     //output.colour = saturate(ambientLightCol + float4(directionalFinal, 1)); //+float4(pointFinal, 1));
     output.colour = float4(CalculateAllLighting(ambientLightCol.xyz, dirLight, pointLights, float4(input.position, 1), input.normal), 1);
+    
+    output.uvw = CalculateReflectionUVW(World, float4(input.position, 1), input.normal, cameraPos);
     
     return output;
 }

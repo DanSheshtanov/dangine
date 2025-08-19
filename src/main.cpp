@@ -37,40 +37,45 @@ int WINAPI WinMain(
     }
 
     // Assets
-    Texture* texture1 = new Texture{ rend, "assets/textures/colormap.png" };
-    Texture* texture2 = new Texture{ rend, "assets/textures/white.png" };
-    Texture* textureSkybox = new Texture{ rend, "assets/textures/skybox/skybox01.dds", Texture::TextureType::Cubemap };
-    Material* mat_standard = new Material{ "m_standard", rend, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", texture1 };
-    Material_Lit* mat_lit = new Material_Lit{ "m_lit", rend, "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture1 };
-    Material_Lit* mat_lit_white = new Material_Lit{ "m_lit", rend, "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", texture2 };
-    Material_Waves* mat_waves = new Material_Waves{ "m_waves", rend,"Compiled Shaders/VShaderWaves.cso", "Compiled Shaders/PixelShader.cso", texture1 };
-    Material_Skybox* mat_skybox = new Material_Skybox{ "m_skybox", rend, "Compiled Shaders/SkyboxVS.cso", "Compiled Shaders/SkyboxPS.cso", textureSkybox };
-    Mesh* mesh1 = new Mesh{ rend, "assets/models/sub.obj"};
-    Mesh* mesh2 = new Mesh{ rend, "assets/models/cube.obj"};
-    Mesh* mesh3 = new Mesh{ rend, "assets/models/pizza.obj"};
-    Mesh* mesh4 = new Mesh{ rend, "assets/models/sphere.obj"};
+    Texture* tex_colourmap = new Texture{ rend, "assets/textures/colormap.png" };
+    Texture* tex_white = new Texture{ rend, "assets/textures/white.png" };
+    Texture* tex_skybox = new Texture{ rend, "assets/textures/skybox/skybox02.dds", Texture::TextureType::Cubemap };
+    Texture* tex_skyboxTest = new Texture{ rend, "assets/textures/skybox/TestCubemap.dds", Texture::TextureType::Cubemap };
+    Material* mat_standard = new Material{ "m_standard", rend, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/PixelShader.cso", tex_white };
+    //Material_Lit* mat_lit = new Material_Lit{ "m_lit", rend, "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/PixelShader.cso", tex_colourmap };
+    Material_Lit* mat_lit_coloured = new Material_Lit{ "m_lit", rend, "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/ReflectivePS.cso", tex_colourmap };
+    Material_Lit* mat_lit_white = new Material_Lit{ "m_lit", rend, "Compiled Shaders/VShaderLit.cso", "Compiled Shaders/ReflectivePS.cso", tex_white };
+    mat_lit_coloured->SetReflectionTexture(tex_skybox);
+    mat_lit_white->SetReflectionTexture(tex_skybox);
+    mat_lit_white->reflectiveness = 0.5f;
+    Material_Waves* mat_waves = new Material_Waves{ "m_waves", rend,"Compiled Shaders/VShaderWaves.cso", "Compiled Shaders/PixelShader.cso", tex_colourmap };
+    Material_Skybox* mat_skybox = new Material_Skybox{ "m_skybox", rend, "Compiled Shaders/SkyboxVS.cso", "Compiled Shaders/SkyboxPS.cso", tex_skybox };
+    Mesh* mesh_cube = new Mesh{ rend, "assets/models/cube.obj"};
+    Mesh* mesh_sphere = new Mesh{ rend, "assets/models/sphere.obj"};
+    Mesh* mesh_sub = new Mesh{ rend, "assets/models/sub.obj"};
+    Mesh* mesh_pizza = new Mesh{ rend, "assets/models/pizza.obj"};
 
     // Scene
     Camera cam;
     cam.transform.position = XMVectorSetZ(cam.transform.position, -8);
 
-    Entity skybox{ "Skybox", &mesh2, (Material**)&mat_skybox };
+    Entity skybox{ "Skybox", &mesh_cube, (Material**)&mat_skybox };
     rend.SetSkybox(&skybox);
 
-    Entity e1{ "Sub", &mesh1, (Material**)&mat_waves};
+    Entity e1{ "Sub", &mesh_sub, (Material**)&mat_waves};
     e1.transform.scale = XMVectorSet(10, 10, 10, 1);
     rend.RegisterEntity(&e1);
 
-    Entity e2{ "Cube", &mesh4,(Material**)&mat_skybox};
+    Entity e2{ "Sphere", &mesh_sphere,(Material**)&mat_skybox};
     //Entity e2{ "Cube", &mesh2, &mat_standard};
     rend.RegisterEntity(&e2);
     e2.transform.Translate({ 3, 0, 0.5f });
 
-    Entity e3{ "Cube", &mesh2, (Material**)&mat_lit_white};
+    Entity e3{ "Cube", &mesh_cube, (Material**)&mat_lit_white};
     rend.RegisterEntity(&e3);
     e3.transform.Translate({ -3, 0, 0.5f });
 
-    Entity e4{ "Pizza", &mesh3, (Material**)&mat_lit };
+    Entity e4{ "Pizza", &mesh_pizza, (Material**)&mat_lit_coloured };
     rend.RegisterEntity(&e4);
     e4.transform.Translate({ 0, -2.5f, 0 });
     e4.transform.scale = XMVectorSet(10, 10, 10, 1);
@@ -102,7 +107,7 @@ int WINAPI WinMain(
 
             XMVECTOR rotation = XMVectorScale({ 0.1f, 0.4f, 0.05f }, Time::GetDeltaTime());
             e2.transform.Rotate(XMVectorScale(rotation, 2.5f));
-            e3.transform.Rotate(XMVectorScale(-rotation, 2.5f));
+            //e3.transform.Rotate(XMVectorScale(-rotation, 2.5f));
             
             rend.GetPointLights()[0].position = XMVectorSetX(rend.GetPointLights()[0].position, sin(Time::GetElapsedTime() * 5));
 
