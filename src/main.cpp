@@ -15,6 +15,8 @@
 #include "Entity.h"
 
 
+void OrbitCam(Camera& cam);
+
 // Program entry point
 int WINAPI WinMain(
     _In_ HINSTANCE hInstance,
@@ -66,7 +68,7 @@ int WINAPI WinMain(
     e1.transform.scale = XMVectorSet(10, 10, 10, 1);
     rend.RegisterEntity(&e1);
 
-    Entity e2{ "Sphere", &mesh_sphere,(Material**)&mat_skybox};
+    Entity e2{ "Sphere", &mesh_sphere,(Material**)&mat_lit_white};
     //Entity e2{ "Cube", &mesh2, &mat_standard};
     rend.RegisterEntity(&e2);
     e2.transform.Translate({ 3, 0, 0.5f });
@@ -129,9 +131,20 @@ int WINAPI WinMain(
                 cam.transform.position = XMVectorSet(0, 0, 0, 0);
             cam.transform.Rotate(XMVECTOR{ -(float)msState.y, (float)msState.x } *0.001f);
 
+            OrbitCam(cam);
+
             rend.RenderFrame(cam);
         }
     }
 
     return 0;
+}
+
+void OrbitCam(Camera& cam)
+{
+    float height = XMVectorGetY(cam.transform.position);
+    float distance = 7;
+    float scaledTime = Time::GetElapsedTime() * 0.5f;
+    cam.transform.position = XMVectorSet(cos(scaledTime) * distance, height, sin(scaledTime) * distance, 1);
+    cam.transform.eulerRotation = XMVectorSetY(cam.transform.eulerRotation, -scaledTime - XM_PIDIV2);
 }
