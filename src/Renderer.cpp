@@ -105,9 +105,9 @@ void Renderer::RenderFrame(Camera& cam)
     devcon->ClearRenderTargetView(backbuffer, bg);
     devcon->ClearDepthStencilView(depthBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
     // Alternatively, include <DirectXColors.h> and do
+    //g_devcon->ClearRenderTargetView(g_backbuffer, DirectX::Colors::DarkSlateGray);
     // You can press F12 on the Colors or DarkSlateGray to see a list of all colours
     // Adding a using namespace DirectX will make it less cumbersome to use this
-    //g_devcon->ClearRenderTargetView(g_backbuffer, DirectX::Colors::DarkSlateGray);
 
     XMMATRIX view = cam.GetViewMatrix();
     XMMATRIX proj = cam.GetProjectionMatrix(window->GetWidth(), window->GetHeight());
