@@ -12,7 +12,7 @@ Material_Lit::Material_Lit(std::string name, Renderer& renderer,
 	: Material(name, renderer, vShaderFilename, pShaderFilename, texture)
 {
 	CreateCBuffer(sizeof(CBufferLighting));
-	CreateCBuffer(sizeof(CBufferLighting), cbufferPixelShader);
+	CreateCBuffer(sizeof(CBufferPS), cbufferPixelShader);
 ;}
 
 void Material_Lit::UpdateMaterial(Entity* entity)
